@@ -1,0 +1,7 @@
+{
+  "name": "geogames",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
