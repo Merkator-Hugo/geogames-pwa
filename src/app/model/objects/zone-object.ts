@@ -1,6 +1,6 @@
 import { GameObject } from './game-object';
 
-export class Zone implements GameObject {
+export class ZoneObject implements GameObject {
     id: string;
     zone: string;
     zoneOnEnter() {

@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Directions } from '../model/utils/directions.enum';
-import { LocationService } from '../services/location.service';
-import { MapService } from '../services/map.service';
+import { GameStateService } from '../services/game-state.service';
 
 @Component({
   selector: 'app-home',
@@ -14,19 +13,15 @@ export class HomePage implements OnInit {
   public speed = 10;
   public demo = true;
 
-  constructor(
-    private locationService: LocationService,
-    private mapService: MapService
-    ) {}
+  constructor(private game: GameStateService) {}
 
   ngOnInit(){
-    this.location = this.formatLocation(this.locationService.getCurrentLocation().getCoords());
+    this.location = this.formatLocation(this.game.player.location().getCoords());
   }
 
   move(event: any, direction: Directions) {
     event.stopPropagation();
-    const newLocation = this.locationService.move(direction, this.speed);
-    this.mapService.refreshPlayerLayer(newLocation);
+    const newLocation = this.game.player.move(direction, this.speed);
     this.location = this.formatLocation(newLocation.getCoords());
   }
 
@@ -41,7 +36,7 @@ export class HomePage implements OnInit {
     }
   }
 
-    private formatLocation(location: number[]): string {
+  private formatLocation(location: number[]): string {
     return (location[0].toFixed(0) + '/' + location[1].toFixed(0));
   }
 
