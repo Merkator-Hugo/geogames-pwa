@@ -18,6 +18,7 @@ export class GameStateService {
     move: (direction: Directions, speed: number): GameLocation => {
       this.currentLocation.move(direction, speed);
       this.mapService.refreshPlayerLayer(this.currentLocation);
+      this.mapService.refreshView(this.currentLocation);
       return this.currentLocation;
     }
   };

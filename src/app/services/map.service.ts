@@ -63,6 +63,10 @@ export class MapService {
     return this.map;
 	}
 
+	public refreshView(point: GameLocation) {
+		this.map.getView().setCenter(point.getCoords());
+	}
+
 	public refreshPlayerLayer(point: GameLocation) {
 		if (this.playerLayer !== undefined) {
 			this.map.removeLayer(this.playerLayer);
