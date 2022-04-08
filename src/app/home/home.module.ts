@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { HomePage } from './home.page';
 
 import { HomePageRoutingModule } from './home-routing.module';
+import { OpenlayersComponent } from '../components/openlayers/openlayers.component';
 
 
 @NgModule({
@@ -14,6 +15,10 @@ import { HomePageRoutingModule } from './home-routing.module';
     IonicModule,
     HomePageRoutingModule
   ],
-  declarations: [HomePage]
+  declarations: [
+    OpenlayersComponent,
+    HomePage
+  ]
 })
+
 export class HomePageModule {}
