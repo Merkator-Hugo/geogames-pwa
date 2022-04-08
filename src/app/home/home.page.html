@@ -1,8 +1,22 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title *ngIf="demo">
+    <!-- <ion-title *ngIf="demo">
       {{speed}}/{{location}}
-    </ion-title>
+    </ion-title> -->
+    <ion-buttons slot="end">
+      <ion-button>
+        <ion-icon name="shapes-outline"></ion-icon>
+        <ion-badge color="light">{{game.zones.count()}}</ion-badge>
+      </ion-button>
+      <ion-button>
+        <ion-icon name="people-outline"></ion-icon>
+        <ion-badge color="light">{{game.persons.count()}}</ion-badge>
+      </ion-button>
+      <ion-button>
+        <ion-icon name="construct-outline"></ion-icon>
+        <ion-badge color="light">{{game.tools.count()}}</ion-badge>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 

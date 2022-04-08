@@ -9,11 +9,12 @@ import { GameStateService } from '../services/game-state.service';
 })
 export class HomePage implements OnInit {
 
+  public demo = true;
   public location = '';
   public speed = 10;
-  public demo = true;
+  public zoneCount = 0;
 
-  constructor(private game: GameStateService) {}
+  constructor(public game: GameStateService) {}
 
   ngOnInit(){
     this.location = this.formatLocation(this.game.player.location().getCoords());
