@@ -26,6 +26,7 @@ export class MapService {
 
 	public map = {
 		create: (): Map => {
+			const center = new GameLocation(5.387307113186567, 52.15528108667735, 'EPSG:4326');
 			this.currentMap = new Map({
 				layers: [
 					new TileLayer({
@@ -33,13 +34,14 @@ export class MapService {
 					})],
 				target: document.getElementById('map'),
 				view: new View({
-					center: this.locationService.getCurrentLocation().getCoords(),
-					zoom: 18
+					center: center.getCoords(),
+					zoom: 12
 				})
 			});
 			this.currentMap.on('click', (event) => {
 				alert(event.coordinate);
 			});
+			this.zones.createLayer();
 			setTimeout(() => {
 				this.currentMap.updateSize();
 			}, 500);
@@ -47,10 +49,13 @@ export class MapService {
 		}
 	};
 	public view = {
-		refresh: (point: GameLocation): void => this.currentMap.getView().setCenter(point.getCoords())
+		get: (): View => this.currentMap.getView(),
+		refresh: (view: View): void => {
+			this.currentMap.setView(view);
+		}
 	};
 	public player = {
-		add: (): void => this.player.refresh(this.locationService.getCurrentLocation()),
+		add: (point: GameLocation): void => this.player.refresh(point),
 		refresh: (point: GameLocation): void => {
 			if (this.playerLayer !== undefined) {
 				this.currentMap.removeLayer(this.playerLayer);

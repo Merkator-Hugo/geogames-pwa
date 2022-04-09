@@ -4,6 +4,7 @@ import { ActionTypes } from '../model/utils/action-types.enum';
 import { Directions } from '../model/utils/directions.enum';
 import { EventTypes } from '../model/utils/event-types.enum';
 import { ObjectTypes } from '../model/utils/object-types.enum';
+import { CartridgeService } from '../services/cartridge.service';
 import { GameStateService } from '../services/game-state.service';
 
 @Component({
@@ -17,7 +18,10 @@ export class HomePage implements OnInit {
   public speed = 10;
   // public zoneCount = 0;
 
-  constructor(public game: GameStateService) {}
+  constructor(
+    public game: GameStateService,
+    private cartRidge: CartridgeService
+    ) {}
 
   ngOnInit(){
     this.location = this.formatLocation(this.game.player.location().getCoords());
@@ -26,14 +30,8 @@ export class HomePage implements OnInit {
 
   loadGame(event: any) {
     event.stopPropagation();
-    const zones = [
-      'POLYGON((5.646 51.7335, 5.647 51.7335, 5.647 51.734, 5.646 51.734, 5.646 51.7335))',
-      'POLYGON((5.6465 51.7335, 5.6475 51.7335, 5.6475 51.734, 5.6465 51.734, 5.6465 51.7335))'
-    ];
-    this.game.zones.add(zones[0], '#0');
-		this.game.zones.add(zones[1], '#1');
-    const action = new GameAction('#a1', ActionTypes.aMessage, '', { message: 'you entered zone 1'});
-    this.game.actions.add(ObjectTypes.eZone, '#0', EventTypes.eEnterZone, action);
+    this.cartRidge.load();
+    this.game.run();
   }
 
   move(event: any, direction: Directions) {

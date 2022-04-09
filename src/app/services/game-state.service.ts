@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
+import View from 'ol/View';
 import { GameAction } from '../model/actions/game-action';
+import { CartStart } from '../model/cartridge/cart-start';
 import { ObjectRef } from '../model/objects/object-ref';
 import { PersonObject } from '../model/objects/person-object';
 import { ToolObject } from '../model/objects/tool-object';
@@ -19,13 +21,19 @@ import { UtilsService } from './utils.service';
 })
 export class GameStateService {
 
-
+  public start = {
+    set: (values: CartStart): CartStart => this.startValues = values,
+    getView: (): View => this.startValues.view,
+    getPlayer: (): GameLocation => this.startValues.player
+  };
   public player = {
     location: (): GameLocation => this.currentLocation,
     move: (direction: Directions, speed: number): GameLocation => {
       this.currentLocation.move(direction, speed);
       this.mapService.player.refresh(this.currentLocation);
-      this.mapService.view.refresh(this.currentLocation);
+      const view = this.mapService.view.get();
+      view.setCenter(this.currentLocation.getCoords());
+      this.mapService.view.refresh(view);
       setTimeout(this.zones.check, 500);
       return this.currentLocation;
     }
@@ -98,6 +106,7 @@ export class GameStateService {
     get: (): boolean => this.demoState,
     set: (state: boolean): boolean => this.demoState = state
   };
+  private startValues: CartStart;
   private currentLocation: GameLocation;
   private zonesObject: ZoneObject[] = [];
   private personsObject: PersonObject[] = [];
@@ -112,6 +121,11 @@ export class GameStateService {
     private utils: UtilsService
     ) {
     this.currentLocation = this.locationService.getCurrentLocation();
+  }
+
+  public run() {
+    this.mapService.view.refresh(this.start.getView());
+    this.mapService.player.add(this.start.getPlayer());
   }
 
 }
