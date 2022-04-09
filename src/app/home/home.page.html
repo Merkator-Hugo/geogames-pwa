@@ -1,6 +1,6 @@
 <ion-header>
   <ion-toolbar>
-    <!-- <ion-title *ngIf="demo">
+    <!-- <ion-title *ngIf="game.demo.get()">
       {{speed}}/{{location}}
     </ion-title> -->
     <ion-buttons slot="end">
@@ -24,7 +24,7 @@
 	<app-openlayers></app-openlayers>
 </ion-content>
 
-<ion-fab vertical="bottom" horizontal="end" slot="fixed" *ngIf="demo">
+<ion-fab vertical="bottom" horizontal="end" slot="fixed" *ngIf="game.demo.get()">
   <ion-fab-button>
     <ion-icon name="share"></ion-icon>
   </ion-fab-button>
@@ -37,5 +37,6 @@
   <ion-fab-list side="start">
     <ion-fab-button (click)="setSpeed($event, 1)"><ion-icon name="add-outline"></ion-icon></ion-fab-button>
     <ion-fab-button (click)="setSpeed($event, -1)"><ion-icon name="remove-outline"></ion-icon></ion-fab-button>
+    <ion-fab-button (click)="loadGame($event)"><ion-icon name="shapes-outline"></ion-icon></ion-fab-button>
   </ion-fab-list>
 </ion-fab>

@@ -14,7 +14,9 @@ export class OpenlayersComponent implements OnInit {
 	constructor(private mapService: MapService) {}
 
 	ngOnInit() {
-		this.map = this.mapService.createMap();
+		this.map = this.mapService.map.create();
+		this.mapService.player.add();
+		this.mapService.zones.createLayer();
 	}
 
 }
