@@ -16,6 +16,10 @@ export class UtilsService {
     }
   };
 
+  public log = {
+    add: (message: string): void => {}
+  };
+
   constructor(
     private toastController: ToastController
     ) { }

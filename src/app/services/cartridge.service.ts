@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import View from 'ol/View';
 import { GameAction } from '../model/actions/game-action';
+import { GameActions } from '../model/actions/game-actions';
 import { CartStart } from '../model/cartridge/cart-start';
 import { ActionTypes } from '../model/utils/action-types.enum';
 import { EventTypes } from '../model/utils/event-types.enum';
@@ -28,7 +29,7 @@ export class CartridgeService {
         actions: [
           {
             event: EventTypes.eEnterZone,
-            id: '#action1'
+            ids: '#action1'
           }
         ]
       },
@@ -52,7 +53,6 @@ export class CartridgeService {
 
   load() {
     const actions: Map<string, GameAction> = new Map();
-    // const viewCenter = new GameLocation(this.cartridge.start.view.center[0], this.cartridge.start.view.center[1], 'EPSG:4326');
     this.game.start.set(
       new CartStart(
         new View({
@@ -65,22 +65,34 @@ export class CartridgeService {
     this.cartridge.actions.forEach((action) => {
       actions.set(action.id, new GameAction(action.id, action.type, action.name, action.payload));
     });
+    // this.cartridge.zones.forEach((zone) => {
+    //   this.game.zones.add(zone.zone, zone.id);
+    //   zone.actions.forEach((action) => {
+    //     this.game.actions.add(ObjectTypes.eZone, zone.id, action.event, actions.get(action.id));
+    //   });
+    // });
     this.cartridge.zones.forEach((zone) => {
       this.game.zones.add(zone.zone, zone.id);
       zone.actions.forEach((action) => {
-        this.game.actions.add(ObjectTypes.eZone, zone.id, action.event, actions.get(action.id));
+        const ids = action.ids.split(';');
+        const acts = new GameActions();
+        ids.forEach((id) => {
+          acts.add(actions.get(id));
+        });
+        this.game.actions.add(ObjectTypes.eZone, zone.id, action.event, acts);
       });
     });
   }
 
-  loadOK() {
-    const zones = [
-      'POLYGON((5.646 51.7335, 5.647 51.7335, 5.647 51.734, 5.646 51.734, 5.646 51.7335))',
-      'POLYGON((5.6465 51.7335, 5.6475 51.7335, 5.6475 51.734, 5.6465 51.734, 5.6465 51.7335))'
-    ];
-    this.game.zones.add(zones[0], '#0');
-		this.game.zones.add(zones[1], '#1');
-    const action = new GameAction('#a1', ActionTypes.aMessage, '', { message: 'you entered zone 1'});
-    this.game.actions.add(ObjectTypes.eZone, '#0', EventTypes.eEnterZone, action);
-  }
+  // loadOK() {
+  //   const zones = [
+  //     'POLYGON((5.646 51.7335, 5.647 51.7335, 5.647 51.734, 5.646 51.734, 5.646 51.7335))',
+  //     'POLYGON((5.6465 51.7335, 5.6475 51.7335, 5.6475 51.734, 5.6465 51.734, 5.6465 51.7335))'
+  //   ];
+  //   this.game.zones.add(zones[0], '#0');
+	// 	this.game.zones.add(zones[1], '#1');
+  //   const action = new GameAction('#a1', ActionTypes.aMessage, '', { message: 'you entered zone 1'});
+  //   const actions = new GameActions().add(action);
+  //   this.game.actions.add(ObjectTypes.eZone, '#0', EventTypes.eEnterZone, actions);
+  // }
 }

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import View from 'ol/View';
 import { GameAction } from '../model/actions/game-action';
+import { GameActions } from '../model/actions/game-actions';
 import { CartStart } from '../model/cartridge/cart-start';
 import { ObjectRef } from '../model/objects/object-ref';
 import { PersonObject } from '../model/objects/person-object';
@@ -52,8 +53,10 @@ export class GameStateService {
         switch(zone.type) {
           case ObjectTypes.eZone:
             const object = this.zonesObject.find((z) => z.id === zone.id);
-            const action = object.getAction(EventTypes.eStayInZone);
-            this.actions.start(action);
+            // const action = object.getAction(EventTypes.eStayInZone);
+            // this.actions.start(action);
+            const actions = object.getActions(EventTypes.eStayInZone);
+            this.actions.start(actions);
             break;
         }
       });
@@ -62,8 +65,10 @@ export class GameStateService {
         switch(zone.type) {
           case ObjectTypes.eZone:
             const object = this.zonesObject.find((z) => z.id === zone.id);
-            const action = object.getAction(EventTypes.eEnterZone);
-            this.actions.start(action);
+            // const action = object.getAction(EventTypes.eEnterZone);
+            // this.actions.start(action);
+            const actions = object.getActions(EventTypes.eEnterZone);
+            this.actions.start(actions);
             break;
         }
       });
@@ -72,8 +77,10 @@ export class GameStateService {
         switch(zone.type) {
           case ObjectTypes.eZone:
             const object = this.zonesObject.find((z) => z.id === zone.id);
-            const action = object.getAction(EventTypes.eLeaveZone);
-            this.actions.start(action);
+            // const action = object.getAction(EventTypes.eLeaveZone);
+            // this.actions.start(action);
+            const actions = object.getActions(EventTypes.eLeaveZone);
+            this.actions.start(actions);
             break;
         }
       });
@@ -86,21 +93,29 @@ export class GameStateService {
     count: (): number => this.toolsObject.length
   };
   public actions = {
-    add: (objectType: ObjectTypes, id: string, event: EventTypes, action: GameAction): void => {
+    // add: (objectType: ObjectTypes, id: string, event: EventTypes, action: GameAction): void => {
+    //   switch(objectType) {
+    //     case ObjectTypes.eZone:
+    //       const object = this.zonesObject.find((z) => z.id === id);
+    //       object.addAction(event, action);
+    //       break;
+    //   }
+    // },
+    start: (actions: GameActions) => {
+      if (actions === null) {
+        this.utils.log.add('No actions found');
+      } else {
+        this.actionService.startActions(actions);
+      }
+    },
+    add: (objectType: ObjectTypes, id: string, event: EventTypes, actions: GameActions): void => {
       switch(objectType) {
         case ObjectTypes.eZone:
           const object = this.zonesObject.find((z) => z.id === id);
-          object.addAction(event, action);
+          object.addAction(event, actions);
           break;
       }
     },
-    start: (action: GameAction) => {
-      if (action === null) {
-        this.utils.toast.present('No action set');
-      } else {
-        this.actionService.startAction(action);
-      }
-    }
   };
   public demo = {
     get: (): boolean => this.demoState,
