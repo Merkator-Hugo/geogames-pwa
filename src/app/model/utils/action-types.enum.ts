@@ -1,3 +1,4 @@
 export enum ActionTypes {
-    aMessage = 'sendMessage'
+    eMessage = 'sendMessage',
+    eActivation = 'setActivation'
 }

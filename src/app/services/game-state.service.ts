@@ -1,6 +1,5 @@
-import { Injectable } from '@angular/core';
+import { Injectable, EventEmitter } from '@angular/core';
 import View from 'ol/View';
-import { GameAction } from '../model/actions/game-action';
 import { GameActions } from '../model/actions/game-actions';
 import { CartStart } from '../model/cartridge/cart-start';
 import { ObjectRef } from '../model/objects/object-ref';
@@ -12,7 +11,6 @@ import { Directions } from '../model/utils/directions.enum';
 import { EventTypes } from '../model/utils/event-types.enum';
 import { GameLocation } from '../model/utils/game-location';
 import { ObjectTypes } from '../model/utils/object-types.enum';
-import { ActionService } from './action.service';
 import { LocationService } from './location.service';
 import { MapService } from './map.service';
 import { UtilsService } from './utils.service';
@@ -41,9 +39,11 @@ export class GameStateService {
   };
   public zones = {
     count: (): number => this.zonesObject.length,
-    add: (wkt: string, id: string): void => {
+    add: (wkt: string, id: string, isActive: boolean): void => {
       this.zonesObject.push(new ZoneObject(id, wkt));
-      this.mapService.zones.add(wkt, id);
+      if(isActive) {
+        this.mapService.zones.add(wkt, id, isActive);
+      }
     },
     check: () => {
       const oldCheckedZones = this.checkedZones.map(e => ({ ... e }));
@@ -53,8 +53,6 @@ export class GameStateService {
         switch(zone.type) {
           case ObjectTypes.eZone:
             const object = this.zonesObject.find((z) => z.id === zone.id);
-            // const action = object.getAction(EventTypes.eStayInZone);
-            // this.actions.start(action);
             const actions = object.getActions(EventTypes.eStayInZone);
             this.actions.start(actions);
             break;
@@ -65,8 +63,6 @@ export class GameStateService {
         switch(zone.type) {
           case ObjectTypes.eZone:
             const object = this.zonesObject.find((z) => z.id === zone.id);
-            // const action = object.getAction(EventTypes.eEnterZone);
-            // this.actions.start(action);
             const actions = object.getActions(EventTypes.eEnterZone);
             this.actions.start(actions);
             break;
@@ -77,13 +73,16 @@ export class GameStateService {
         switch(zone.type) {
           case ObjectTypes.eZone:
             const object = this.zonesObject.find((z) => z.id === zone.id);
-            // const action = object.getAction(EventTypes.eLeaveZone);
-            // this.actions.start(action);
             const actions = object.getActions(EventTypes.eLeaveZone);
             this.actions.start(actions);
             break;
         }
       });
+    },
+    setActivation: (id: string, state: boolean): void => {
+      const zone = this.zonesObject.find((z) => z.id === id);
+      zone.setActivation(state);
+      this.mapService.zones.add(zone.zone, zone.id, state);
     }
   };
   public persons = {
@@ -93,19 +92,23 @@ export class GameStateService {
     count: (): number => this.toolsObject.length
   };
   public actions = {
-    // add: (objectType: ObjectTypes, id: string, event: EventTypes, action: GameAction): void => {
-    //   switch(objectType) {
-    //     case ObjectTypes.eZone:
-    //       const object = this.zonesObject.find((z) => z.id === id);
-    //       object.addAction(event, action);
-    //       break;
-    //   }
-    // },
     start: (actions: GameActions) => {
       if (actions === null) {
         this.utils.log.add('No actions found');
       } else {
-        this.actionService.startActions(actions);
+        actions.actions.forEach(action => {
+          switch(action.type) {
+            case ActionTypes.eMessage:
+              this.utils.toast.present(action.payload.message);
+              break;
+            case ActionTypes.eActivation:
+              switch(action.payload.type) {
+                case ObjectTypes.eZone:
+                  this.zones.setActivation(action.payload.id, action.payload.start);
+                  break;
+              }
+            }
+        });
       }
     },
     add: (objectType: ObjectTypes, id: string, event: EventTypes, actions: GameActions): void => {
@@ -132,7 +135,6 @@ export class GameStateService {
   constructor(
     private locationService: LocationService,
     private mapService: MapService,
-    private actionService: ActionService,
     private utils: UtilsService
     ) {
     this.currentLocation = this.locationService.getCurrentLocation();

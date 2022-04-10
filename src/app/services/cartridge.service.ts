@@ -24,27 +24,66 @@ export class CartridgeService {
     },
     zones: [
       {
-        id: '#zone',
+        id: '#zone0',
         zone: 'POLYGON((5.646 51.7335, 5.647 51.7335, 5.647 51.734, 5.646 51.734, 5.646 51.7335))',
+        active: true,
         actions: [
           {
             event: EventTypes.eEnterZone,
-            ids: '#action1'
+            ids: '#action1;#action5'
+          },
+          {
+            event: EventTypes.eLeaveZone,
+            ids: '#action2'
           }
         ]
       },
       {
-        id: '#zone',
+        id: '#zone1',
         zone: 'POLYGON((5.6465 51.7335, 5.6475 51.7335, 5.6475 51.734, 5.6465 51.734, 5.6465 51.7335))',
-        actions: []
+        active: false,
+        actions: [
+          {
+            event: EventTypes.eEnterZone,
+            ids: '#action3'
+          },
+          {
+            event: EventTypes.eLeaveZone,
+            ids: '#action4'
+          }
+        ]
       }
     ],
     actions: [
       {
         id: '#action1',
-        type: ActionTypes.aMessage,
+        type: ActionTypes.eMessage,
         name: '',
         payload: { message: 'you entered zone 1'}
+      },
+      {
+        id: '#action2',
+        type: ActionTypes.eMessage,
+        name: '',
+        payload: { message: 'you left zone 1'}
+      },
+      {
+        id: '#action3',
+        type: ActionTypes.eMessage,
+        name: '',
+        payload: { message: 'you entered zone 2'}
+      },
+      {
+        id: '#action4',
+        type: ActionTypes.eMessage,
+        name: '',
+        payload: { message: 'you left zone 2'}
+      },
+      {
+        id: '#action5',
+        type: ActionTypes.eActivation,
+        name: '',
+        payload: { type: ObjectTypes.eZone, id: '#zone1', state: true }
       }
     ]
   };
@@ -65,14 +104,8 @@ export class CartridgeService {
     this.cartridge.actions.forEach((action) => {
       actions.set(action.id, new GameAction(action.id, action.type, action.name, action.payload));
     });
-    // this.cartridge.zones.forEach((zone) => {
-    //   this.game.zones.add(zone.zone, zone.id);
-    //   zone.actions.forEach((action) => {
-    //     this.game.actions.add(ObjectTypes.eZone, zone.id, action.event, actions.get(action.id));
-    //   });
-    // });
     this.cartridge.zones.forEach((zone) => {
-      this.game.zones.add(zone.zone, zone.id);
+      this.game.zones.add(zone.zone, zone.id, zone.active);
       zone.actions.forEach((action) => {
         const ids = action.ids.split(';');
         const acts = new GameActions();
@@ -84,15 +117,4 @@ export class CartridgeService {
     });
   }
 
-  // loadOK() {
-  //   const zones = [
-  //     'POLYGON((5.646 51.7335, 5.647 51.7335, 5.647 51.734, 5.646 51.734, 5.646 51.7335))',
-  //     'POLYGON((5.6465 51.7335, 5.6475 51.7335, 5.6475 51.734, 5.6465 51.734, 5.6465 51.7335))'
-  //   ];
-  //   this.game.zones.add(zones[0], '#0');
-	// 	this.game.zones.add(zones[1], '#1');
-  //   const action = new GameAction('#a1', ActionTypes.aMessage, '', { message: 'you entered zone 1'});
-  //   const actions = new GameActions().add(action);
-  //   this.game.actions.add(ObjectTypes.eZone, '#0', EventTypes.eEnterZone, actions);
-  // }
 }

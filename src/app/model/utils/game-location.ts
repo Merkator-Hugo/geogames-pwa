@@ -27,16 +27,16 @@ export class GameLocation {
 
     move(direction: Directions, speed: number): void {
         switch(direction) {
-          case Directions.dUP:
+          case Directions.eUp:
             this.lat += speed;
             break;
-          case Directions.dDOWN:
+          case Directions.eDown:
             this.lat -= speed;
             break;
-          case Directions.dLEFT:
+          case Directions.eLeft:
             this.lon -= speed;
             break;
-          case Directions.dRIGHT:
+          case Directions.eRight:
             this.lon += speed;
             break;
         }

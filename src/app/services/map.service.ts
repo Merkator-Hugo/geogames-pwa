@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import Feature from 'ol/Feature';
-import { Polygon } from 'ol/geom';
 import Geometry from 'ol/geom/Geometry';
 import Point from 'ol/geom/Point';
 import TileLayer from 'ol/layer/Tile';
@@ -85,10 +84,14 @@ export class MapService {
 				source: new VectorSource({
 					features: fts,
 				}),
+				style: (feature) => {
+					const active = feature.get('active');
+					return active ? this.activeZoneStyle : this.inactiveZoneStyle;
+				  }
 			});
 			this.currentMap.addLayer(this.zonesLayer);
 		},
-		add: (wkt: string, id: string): void => {
+		add: (wkt: string, id: string, active: boolean): void => {
 			const format = new WKT();
 			const feature = format.readFeature(wkt, {
   				dataProjection: 'EPSG:4326',
@@ -96,9 +99,9 @@ export class MapService {
 			});
 			feature.setProperties({
 				type: 'zone',
+				active,
 				id
 			});
-			// feature.setStyle([this.zoneStyle]);
 			this.zonesLayer.getSource().addFeature(feature);
 		},
 		remove: (): void => {},
@@ -139,12 +142,22 @@ export class MapService {
 			scale: 0.05
 		}),
 	});
-	private zoneStyle = new Style({
+	private activeZoneStyle = new Style({
 		stroke: new Stroke({
-			color: '#000',
+			color: '#3399CC',
+			width: 1.25,
 		}),
 		fill: new Fill({
-			color: '#000',
+			color: 'rgba(255,255,255,0.4)',
+		}),
+	});
+	private inactiveZoneStyle = new Style({
+		stroke: new Stroke({
+			color: '#FF0000',
+			width: 1.25,
+		}),
+		fill: new Fill({
+			color: 'rgba(255,200,200,0.4)',
 		}),
 	});
 
