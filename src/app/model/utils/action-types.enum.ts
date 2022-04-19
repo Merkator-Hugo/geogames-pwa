@@ -1,4 +1,5 @@
 export enum ActionTypes {
     eMessage = 'sendMessage',
-    eActivation = 'setActivation'
+    eActivation = 'setActivation',
+    eVisibility = 'setVisibility'
 }

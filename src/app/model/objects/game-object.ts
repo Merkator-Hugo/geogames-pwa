@@ -4,14 +4,20 @@ import { EventTypes } from '../utils/event-types.enum';
 
 export class GameObject {
     id: string;
-    zone: string;
+    wkt: string;
+    isVisible: boolean;
     isActive: boolean;
     actions: Map<EventTypes, GameActions[]> = new Map();
 
-    constructor(id: string, zone: string){
+    constructor(id: string, zone: string, isVisible: boolean, isActive: boolean){
         this.id = id;
-        this.zone = zone;
-        this.isActive = false;
+        this.wkt = zone;
+        this.isVisible = isVisible;
+        this.isActive = isActive;
+    }
+
+    setVisibility(state: boolean) {
+        this.isVisible = state;
     }
 
     setActivation(state: boolean) {

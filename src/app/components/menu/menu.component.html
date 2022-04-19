@@ -1,0 +1,14 @@
+<ion-content>
+  <ion-list>
+    <ion-list-header>
+      <ion-label>Menu</ion-label>
+      <ion-button (click)="closeModal()">
+        <ion-icon name="close-outline"></ion-icon>
+      </ion-button>
+    </ion-list-header>
+    <ion-item (click)="loadGame($event)">
+      <ion-icon name="download-outline" slot="start"></ion-icon>
+      <ion-label>Load Game</ion-label>
+    </ion-item>
+  </ion-list>
+</ion-content>

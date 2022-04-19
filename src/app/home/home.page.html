@@ -3,6 +3,12 @@
     <!-- <ion-title *ngIf="game.demo.get()">
       {{speed}}/{{location}}
     </ion-title> -->
+    <ion-buttons slot="start">
+      <!-- <ion-button (click)="loadGame($event)"> -->
+      <ion-button (click)="openMenu()">
+        <ion-icon name="menu-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
     <ion-buttons slot="end">
       <ion-button>
         <ion-icon name="shapes-outline"></ion-icon>
@@ -37,6 +43,6 @@
   <ion-fab-list side="start">
     <ion-fab-button (click)="setSpeed($event, 1)"><ion-icon name="add-outline"></ion-icon></ion-fab-button>
     <ion-fab-button (click)="setSpeed($event, -1)"><ion-icon name="remove-outline"></ion-icon></ion-fab-button>
-    <ion-fab-button (click)="loadGame($event)"><ion-icon name="shapes-outline"></ion-icon></ion-fab-button>
+    <!-- <ion-fab-button (click)="loadGame($event)"><ion-icon name="shapes-outline"></ion-icon></ion-fab-button> -->
   </ion-fab-list>
 </ion-fab>

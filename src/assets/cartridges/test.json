@@ -1,0 +1,87 @@
+{
+    "start": {
+      "view": {
+        "center": [5.6464749, 51.7330457],
+        "zoom": 18
+      },
+      "player": [5.6464749, 51.7330457]
+    },
+    "zones": [
+      {
+        "id": "#zone0",
+        "zone": "POLYGON((5.646 51.7335, 5.647 51.7335, 5.647 51.734, 5.646 51.734, 5.646 51.7335))",
+        "isVisible": true,
+        "isActive": true,
+        "actions": [
+          {
+            "event": "zoneOnEnter",
+            "ids": "#action1;#action5;#action6"
+          },
+          {
+            "event": "zoneOnLeave",
+            "ids": "#action2;#action7"
+          }
+        ]
+      },
+      {
+        "id": "#zone1",
+        "zone": "POLYGON((5.6465 51.7335, 5.6475 51.7335, 5.6475 51.734, 5.6465 51.734, 5.6465 51.7335))",
+        "isVisible": false,
+        "isActive": false,
+        "actions": [
+          {
+            "event": "zoneOnEnter",
+            "ids": "#action3"
+          },
+          {
+            "event": "zoneOnLeave",
+            "ids": "#action4"
+          }
+        ]
+      }
+    ],
+    "actions": [
+      {
+        "id": "#action1",
+        "type": "sendMessage",
+        "name": "",
+        "payload": { "message": "you entered zone 1"}
+      },
+      {
+        "id": "#action2",
+        "type": "sendMessage",
+        "name": "",
+        "payload": { "message": "you left zone 1"}
+      },
+      {
+        "id": "#action3",
+        "type": "sendMessage",
+        "name": "",
+        "payload": { "message": "you entered zone 2"}
+      },
+      {
+        "id": "#action4",
+        "type": "sendMessage",
+        "name": "",
+        "payload": { "message": "you left zone 2"}
+      },
+      {
+        "id": "#action5",
+        "type": "setVisibility",
+        "name": "",
+        "payload": { "type": "zone", "id": "#zone1", "state": true }
+      },
+      {
+        "id": "#action6",
+        "type": "setActivation",
+        "name": "",
+        "payload": { "type": "zone", "id": "#zone1", "state": true }
+      },
+      {
+        "id": "#action7",
+        "type": "setActivation",
+        "name": "",
+        "payload": { "type": "zone", "id": "#zone0", "state": false }
+      }
+    ]
+  }

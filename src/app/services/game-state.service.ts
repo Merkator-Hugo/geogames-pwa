@@ -39,11 +39,12 @@ export class GameStateService {
   };
   public zones = {
     count: (): number => this.zonesObject.length,
-    add: (wkt: string, id: string, isActive: boolean): void => {
-      this.zonesObject.push(new ZoneObject(id, wkt));
-      if(isActive) {
-        this.mapService.zones.add(wkt, id, isActive);
-      }
+    add: (wkt: string, id: string, isVisible: boolean, isActive: boolean): void => {
+      const newZone = new ZoneObject(id, wkt, isVisible, isActive);
+      this.zonesObject.push(newZone);
+      // if(isActive) {
+        this.mapService.zones.add(newZone);
+      // }
     },
     check: () => {
       const oldCheckedZones = this.checkedZones.map(e => ({ ... e }));
@@ -79,10 +80,20 @@ export class GameStateService {
         }
       });
     },
-    setActivation: (id: string, state: boolean): void => {
+    setVisibility: (id: string, isVisible: boolean): void => {
       const zone = this.zonesObject.find((z) => z.id === id);
-      zone.setActivation(state);
-      this.mapService.zones.add(zone.zone, zone.id, state);
+      zone.setVisibility(isVisible);
+      this.mapService.zones.setVisibility(zone, isVisible);
+      // if (isVisible) {
+      //   this.mapService.zones.add(zone);
+      // } else {
+      //   this.mapService.zones.remove();
+      // }
+    },
+    setActivation: (id: string, isActive: boolean): void => {
+      const zone = this.zonesObject.find((z) => z.id === id);
+      zone.setActivation(isActive);
+      this.mapService.zones.setActivation(zone, isActive);
     }
   };
   public persons = {
@@ -96,19 +107,7 @@ export class GameStateService {
       if (actions === null) {
         this.utils.log.add('No actions found');
       } else {
-        actions.actions.forEach(action => {
-          switch(action.type) {
-            case ActionTypes.eMessage:
-              this.utils.toast.present(action.payload.message);
-              break;
-            case ActionTypes.eActivation:
-              switch(action.payload.type) {
-                case ObjectTypes.eZone:
-                  this.zones.setActivation(action.payload.id, action.payload.start);
-                  break;
-              }
-            }
-        });
+        this.handleActions(actions);
       }
     },
     add: (objectType: ObjectTypes, id: string, event: EventTypes, actions: GameActions): void => {
@@ -143,6 +142,30 @@ export class GameStateService {
   public run() {
     this.mapService.view.refresh(this.start.getView());
     this.mapService.player.add(this.start.getPlayer());
+  }
+
+  private handleActions(actions) {
+    actions.actions.forEach(action => {
+      switch(action.type) {
+        case ActionTypes.eMessage:
+          this.utils.toast.present(action.payload.message);
+          break;
+        case ActionTypes.eActivation:
+          switch(action.payload.type) {
+            case ObjectTypes.eZone:
+              this.zones.setActivation(action.payload.id, action.payload.state);
+              break;
+          }
+          break;
+        case ActionTypes.eVisibility:
+          switch(action.payload.type) {
+            case ObjectTypes.eZone:
+              this.zones.setVisibility(action.payload.id, action.payload.state);
+              break;
+          }
+          break;
+        }
+    });
   }
 
 }

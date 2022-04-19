@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { ModalController } from '@ionic/angular';
+import { MenuComponent } from '../components/menu/menu.component';
 import { GameAction } from '../model/actions/game-action';
 import { ActionTypes } from '../model/utils/action-types.enum';
 import { Directions } from '../model/utils/directions.enum';
@@ -20,7 +22,8 @@ export class HomePage implements OnInit {
 
   constructor(
     public game: GameStateService,
-    private cartRidge: CartridgeService
+    private cartRidge: CartridgeService,
+    public modalController: ModalController
     ) {}
 
   ngOnInit(){
@@ -28,10 +31,12 @@ export class HomePage implements OnInit {
     this.game.demo.set(true);
   }
 
-  loadGame(event: any) {
-    event.stopPropagation();
-    this.cartRidge.load();
-    this.game.run();
+  async openMenu() {
+    const modal = await this.modalController.create({
+      component: MenuComponent,
+      cssClass: 'modal-class'
+    });
+    return await modal.present();
   }
 
   move(event: any, direction: Directions) {

@@ -17,6 +17,7 @@ import { GameLocation } from '../model/utils/game-location';
 import { LocationService } from './location.service';
 import WKT from 'ol/format/WKT';
 import { ObjectRef } from '../model/objects/object-ref';
+import { ZoneObject } from '../model/objects/zone-object';
 
 @Injectable({
 	providedIn: 'root'
@@ -85,34 +86,62 @@ export class MapService {
 					features: fts,
 				}),
 				style: (feature) => {
+					const visible = feature.get('visible');
 					const active = feature.get('active');
-					return active ? this.activeZoneStyle : this.inactiveZoneStyle;
+					return visible
+						? active ? this.activeZoneStyle : this.inactiveZoneStyle
+						: null;
 				  }
 			});
 			this.currentMap.addLayer(this.zonesLayer);
 		},
-		add: (wkt: string, id: string, active: boolean): void => {
+		add: (zone: ZoneObject): void => {
 			const format = new WKT();
-			const feature = format.readFeature(wkt, {
+			const feature = format.readFeature(zone.wkt, {
   				dataProjection: 'EPSG:4326',
   				featureProjection: 'EPSG:3857',
 			});
 			feature.setProperties({
 				type: 'zone',
-				active,
-				id
+				visible: zone.isVisible,
+				active: zone.isActive,
+				id: zone.id
 			});
 			this.zonesLayer.getSource().addFeature(feature);
 		},
-		remove: (): void => {},
+		remove: (): void => {
+			// this.zonesLayer.getSource();
+		},
+		setVisibility: (zone, isVisible): void => {
+			const source = this.zonesLayer.getSource();
+			const features = source.getFeatures();
+			features.forEach((feature) => {
+				if (feature.get('id') === zone.id) {
+					feature.set('visible', isVisible);
+				}
+			});
+			const x = 1;
+		},
+		setActivation: (zone, isActive): void => {
+			const source = this.zonesLayer.getSource();
+			const features = source.getFeatures();
+			features.forEach((feature) => {
+				if (feature.get('id') === zone.id) {
+					feature.set('active', isActive);
+				}
+			});
+			const x = 1;
+		},
 		check: (point: GameLocation): ObjectRef[] => {
 			const pixel = this.currentMap.getPixelFromCoordinate(this.locationService.getCurrentLocation().getCoords());
 			const zones = [];
 			this.currentMap.forEachFeatureAtPixel(
 				pixel,
 				(feature) => {
-					zones.push(new ObjectRef(feature.get('id'), feature.get('type')));
-					return false;
+					if (feature.get('active')) {
+						zones.push(new ObjectRef(feature.get('id'), feature.get('type')));
+						return false;
+					}
 				},
 				{
 					layerFilter: (layer) => layer === this.zonesLayer
