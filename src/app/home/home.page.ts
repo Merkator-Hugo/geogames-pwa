@@ -2,13 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { MenuComponent } from '../components/menu/menu.component';
 import { ZoneListComponent } from '../components/zone-list/zone-list.component';
-import { GameAction } from '../model/actions/game-action';
-import { ActionTypes } from '../model/utils/action-types.enum';
 import { Directions } from '../model/utils/directions.enum';
-import { EventTypes } from '../model/utils/event-types.enum';
-import { ObjectTypes } from '../model/utils/object-types.enum';
 import { CartridgeService } from '../services/cartridge.service';
+import { GameLoopService } from '../services/game-loop.service';
 import { GameStateService } from '../services/game-state.service';
+import { MapService } from '../services/map.service';
 
 @Component({
   selector: 'app-home',
@@ -17,17 +15,19 @@ import { GameStateService } from '../services/game-state.service';
 })
 export class HomePage implements OnInit {
 
-  public location = '';
+  // public location = '';
   public speed = 10;
 
   constructor(
-    public game: GameStateService,
+    public gamestate: GameStateService,
+    public gameloop: GameLoopService,
     private cartRidge: CartridgeService,
-    public modalController: ModalController
+    public modalController: ModalController,
+    private mapService: MapService
     ) {}
 
   ngOnInit(){
-    this.location = this.formatLocation(this.game.player.location().getCoords());
+    // this.location = this.formatLocation(this.gamestate.player.location.get().getCoords());
     this.setDemo();
   }
 
@@ -65,8 +65,26 @@ export class HomePage implements OnInit {
 
   move(event: any, direction: Directions) {
     event.stopPropagation();
-    const newLocation = this.game.player.move(direction, this.speed);
-    this.location = this.formatLocation(newLocation.getCoords());
+    const currentLocation = this.gamestate.player.location.get();
+    switch(direction) {
+      case Directions.eUp:
+        currentLocation.changeLat(this.speed);
+        break;
+      case Directions.eDown:
+        currentLocation.changeLat(-1 * this.speed);
+        break;
+      case Directions.eLeft:
+        currentLocation.changeLon(-1 * this.speed);
+        break;
+      case Directions.eRight:
+        currentLocation.changeLon(this.speed);
+        break;
+    }
+    this.mapService.player.refresh(currentLocation);
+    const view = this.mapService.view.get();
+    view.setCenter(currentLocation.getCoords());
+    this.mapService.view.refresh(view);
+    this.gameloop.check();
   }
 
   setSpeed(event: any, direction: number) {
@@ -81,7 +99,7 @@ export class HomePage implements OnInit {
   }
 
   private setDemo() {
-    this.game.demo.set(true);
+    this.gamestate.demo.set(true);
     this.cartRidge.load();
   }
 

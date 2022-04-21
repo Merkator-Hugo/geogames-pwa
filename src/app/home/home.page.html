@@ -1,7 +1,7 @@
 <ion-header>
   <ion-toolbar>
-    <!-- <ion-title *ngIf="game.demo.get()">
-      {{speed}}/{{location}}
+    <!-- <ion-title *ngIf="gamestate.demo.get()">
+      {{speed}}/{{gamestate.player.location.get()}}
     </ion-title> -->
     <ion-buttons slot="start">
       <ion-button (click)="openMenu()">
@@ -11,15 +11,15 @@
     <ion-buttons slot="end">
       <ion-button (click)="openZoneList()">
         <ion-icon name="shapes-outline"></ion-icon>
-        <ion-badge color="light">{{game.zones.count()}}</ion-badge>
+        <ion-badge color="light">{{gamestate.zones.count()}}</ion-badge>
       </ion-button>
       <ion-button (click)="openPersonList()">
         <ion-icon name="people-outline"></ion-icon>
-        <ion-badge color="light">{{game.persons.count()}}</ion-badge>
+        <ion-badge color="light">{{gamestate.persons.count()}}</ion-badge>
       </ion-button>
       <ion-button (click)="openToolList()">
         <ion-icon name="construct-outline"></ion-icon>
-        <ion-badge color="light">{{game.tools.count()}}</ion-badge>
+        <ion-badge color="light">{{gamestate.tools.count()}}</ion-badge>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
@@ -29,7 +29,7 @@
 	<app-openlayers></app-openlayers>
 </ion-content>
 
-<ion-fab vertical="bottom" horizontal="end" slot="fixed" *ngIf="game.demo.get()">
+<ion-fab vertical="bottom" horizontal="end" slot="fixed" *ngIf="gamestate.demo.get()">
   <ion-fab-button>
     <ion-icon name="share"></ion-icon>
   </ion-fab-button>

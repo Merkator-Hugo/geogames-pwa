@@ -25,21 +25,29 @@ export class GameLocation {
         }
     }
 
-    move(direction: Directions, speed: number): void {
-        switch(direction) {
-          case Directions.eUp:
-            this.lat += speed;
-            break;
-          case Directions.eDown:
-            this.lat -= speed;
-            break;
-          case Directions.eLeft:
-            this.lon -= speed;
-            break;
-          case Directions.eRight:
-            this.lon += speed;
-            break;
-        }
+    changeLat(speed: number) {
+        this.lat += speed;
     }
+
+    changeLon(speed: number) {
+        this.lon += speed;
+    }
+
+    // move(direction: Directions, speed: number): void {
+    //     switch(direction) {
+    //       case Directions.eUp:
+    //         this.lat += speed;
+    //         break;
+    //       case Directions.eDown:
+    //         this.lat -= speed;
+    //         break;
+    //       case Directions.eLeft:
+    //         this.lon -= speed;
+    //         break;
+    //       case Directions.eRight:
+    //         this.lon += speed;
+    //         break;
+    //     }
+    // }
 
 }
