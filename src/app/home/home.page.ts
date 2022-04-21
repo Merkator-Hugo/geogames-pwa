@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { MenuComponent } from '../components/menu/menu.component';
+import { ZoneListComponent } from '../components/zone-list/zone-list.component';
 import { GameAction } from '../model/actions/game-action';
 import { ActionTypes } from '../model/utils/action-types.enum';
 import { Directions } from '../model/utils/directions.enum';
@@ -18,7 +19,6 @@ export class HomePage implements OnInit {
 
   public location = '';
   public speed = 10;
-  // public zoneCount = 0;
 
   constructor(
     public game: GameStateService,
@@ -28,12 +28,36 @@ export class HomePage implements OnInit {
 
   ngOnInit(){
     this.location = this.formatLocation(this.game.player.location().getCoords());
-    this.game.demo.set(true);
+    this.setDemo();
   }
 
   async openMenu() {
     const modal = await this.modalController.create({
       component: MenuComponent,
+      cssClass: 'modal-class'
+    });
+    return await modal.present();
+  }
+
+  async openZoneList() {
+    const modal = await this.modalController.create({
+      component: ZoneListComponent,
+      cssClass: 'modal-class'
+    });
+    return await modal.present();
+  }
+
+  async openPersonList() {
+    const modal = await this.modalController.create({
+      component: ZoneListComponent,
+      cssClass: 'modal-class'
+    });
+    return await modal.present();
+  }
+
+  async openToolList() {
+    const modal = await this.modalController.create({
+      component: ZoneListComponent,
       cssClass: 'modal-class'
     });
     return await modal.present();
@@ -54,6 +78,11 @@ export class HomePage implements OnInit {
     if (this.speed < 10) {
       this.speed = 10;
     }
+  }
+
+  private setDemo() {
+    this.game.demo.set(true);
+    this.cartRidge.load();
   }
 
   private formatLocation(location: number[]): string {

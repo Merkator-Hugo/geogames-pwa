@@ -38,13 +38,12 @@ export class GameStateService {
     }
   };
   public zones = {
-    count: (): number => this.zonesObject.length,
-    add: (wkt: string, id: string, isVisible: boolean, isActive: boolean): void => {
-      const newZone = new ZoneObject(id, wkt, isVisible, isActive);
+    count: (): number => this.zonesObject.filter((zone) => zone.isVisible).length,
+    get: (): ZoneObject[] => this.zonesObject,
+    add: (wkt: string, id: string, name: string, isVisible: boolean, isActive: boolean): void => {
+      const newZone = new ZoneObject(id, name, wkt, isVisible, isActive);
       this.zonesObject.push(newZone);
-      // if(isActive) {
-        this.mapService.zones.add(newZone);
-      // }
+      this.mapService.zones.add(newZone);
     },
     check: () => {
       const oldCheckedZones = this.checkedZones.map(e => ({ ... e }));
@@ -84,11 +83,6 @@ export class GameStateService {
       const zone = this.zonesObject.find((z) => z.id === id);
       zone.setVisibility(isVisible);
       this.mapService.zones.setVisibility(zone, isVisible);
-      // if (isVisible) {
-      //   this.mapService.zones.add(zone);
-      // } else {
-      //   this.mapService.zones.remove();
-      // }
     },
     setActivation: (id: string, isActive: boolean): void => {
       const zone = this.zonesObject.find((z) => z.id === id);

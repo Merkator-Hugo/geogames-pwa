@@ -10,6 +10,7 @@
       {
         "id": "#zone0",
         "zone": "POLYGON((5.646 51.7335, 5.647 51.7335, 5.647 51.734, 5.646 51.734, 5.646 51.7335))",
+        "name": "Zone 0",
         "isVisible": true,
         "isActive": true,
         "actions": [
@@ -26,6 +27,7 @@
       {
         "id": "#zone1",
         "zone": "POLYGON((5.6465 51.7335, 5.6475 51.7335, 5.6475 51.734, 5.6465 51.734, 5.6465 51.7335))",
+        "name": "Zone 1",
         "isVisible": false,
         "isActive": false,
         "actions": [

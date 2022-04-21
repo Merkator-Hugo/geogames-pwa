@@ -6,6 +6,8 @@ import { HomePage } from './home.page';
 
 import { HomePageRoutingModule } from './home-routing.module';
 import { OpenlayersComponent } from '../components/openlayers/openlayers.component';
+import { MenuComponent } from '../components/menu/menu.component';
+import { ZoneListComponent } from '../components/zone-list/zone-list.component';
 
 
 @NgModule({
@@ -17,6 +19,8 @@ import { OpenlayersComponent } from '../components/openlayers/openlayers.compone
   ],
   declarations: [
     OpenlayersComponent,
+    MenuComponent,
+    ZoneListComponent,
     HomePage
   ]
 })

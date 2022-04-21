@@ -1,30 +1,29 @@
 import { Component, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
+import { ZoneObject } from 'src/app/model/objects/zone-object';
 import { CartridgeService } from 'src/app/services/cartridge.service';
 import { GameStateService } from 'src/app/services/game-state.service';
 
 @Component({
-  selector: 'app-menu',
-  templateUrl: './menu.component.html',
-  styleUrls: ['./menu.component.scss'],
+  selector: 'app-zone-list',
+  templateUrl: './zone-list.component.html',
+  styleUrls: ['./zone-list.component.scss'],
 })
-export class MenuComponent implements OnInit {
+export class ZoneListComponent implements OnInit {
+
+  public zones: ZoneObject[] = [];
 
   constructor(
     public game: GameStateService,
-    private cartRidge: CartridgeService,
     public modalController: ModalController
   ) { }
 
-  ngOnInit() {}
-
-  closeModal() {
-    this.modalController.dismiss();
+  ngOnInit() {
+    this.zones = this.game.zones.get();
+    const x = 1;
   }
 
-  loadGame(event: any) {
-    event.stopPropagation();
-    this.cartRidge.load();
+  closeModal() {
     this.modalController.dismiss();
   }
 

@@ -4,21 +4,20 @@
       {{speed}}/{{location}}
     </ion-title> -->
     <ion-buttons slot="start">
-      <!-- <ion-button (click)="loadGame($event)"> -->
       <ion-button (click)="openMenu()">
         <ion-icon name="menu-outline"></ion-icon>
       </ion-button>
     </ion-buttons>
     <ion-buttons slot="end">
-      <ion-button>
+      <ion-button (click)="openZoneList()">
         <ion-icon name="shapes-outline"></ion-icon>
         <ion-badge color="light">{{game.zones.count()}}</ion-badge>
       </ion-button>
-      <ion-button>
+      <ion-button (click)="openPersonList()">
         <ion-icon name="people-outline"></ion-icon>
         <ion-badge color="light">{{game.persons.count()}}</ion-badge>
       </ion-button>
-      <ion-button>
+      <ion-button (click)="openToolList()">
         <ion-icon name="construct-outline"></ion-icon>
         <ion-badge color="light">{{game.tools.count()}}</ion-badge>
       </ion-button>
