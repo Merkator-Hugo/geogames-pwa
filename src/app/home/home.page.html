@@ -34,14 +34,13 @@
     <ion-icon name="share"></ion-icon>
   </ion-fab-button>
   <ion-fab-list side="top">
-    <ion-fab-button (click)="move($event, 'up')"><ion-icon name="arrow-up-outline"></ion-icon></ion-fab-button>
-    <ion-fab-button (click)="move($event, 'left')"><ion-icon name="arrow-back-outline"></ion-icon></ion-fab-button>
-    <ion-fab-button (click)="move($event, 'right')"><ion-icon name="arrow-forward-outline"></ion-icon></ion-fab-button>
-    <ion-fab-button (click)="move($event, 'down')"><ion-icon name="arrow-down-outline"></ion-icon></ion-fab-button>
+    <ion-fab-button (click)="move($event, eDirections.eUp)"><ion-icon name="arrow-up-outline"></ion-icon></ion-fab-button>
+    <ion-fab-button (click)="move($event, eDirections.eLeft)"><ion-icon name="arrow-back-outline"></ion-icon></ion-fab-button>
+    <ion-fab-button (click)="move($event, eDirections.eRight)"><ion-icon name="arrow-forward-outline"></ion-icon></ion-fab-button>
+    <ion-fab-button (click)="move($event, eDirections.eDown)"><ion-icon name="arrow-down-outline"></ion-icon></ion-fab-button>
   </ion-fab-list>
   <ion-fab-list side="start">
     <ion-fab-button (click)="setSpeed($event, 1)"><ion-icon name="add-outline"></ion-icon></ion-fab-button>
     <ion-fab-button (click)="setSpeed($event, -1)"><ion-icon name="remove-outline"></ion-icon></ion-fab-button>
-    <!-- <ion-fab-button (click)="loadGame($event)"><ion-icon name="shapes-outline"></ion-icon></ion-fab-button> -->
   </ion-fab-list>
 </ion-fab>

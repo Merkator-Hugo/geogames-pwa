@@ -17,6 +17,7 @@ export class HomePage implements OnInit {
 
   // public location = '';
   public speed = 10;
+  eDirections = Directions;
 
   constructor(
     public gamestate: GameStateService,
