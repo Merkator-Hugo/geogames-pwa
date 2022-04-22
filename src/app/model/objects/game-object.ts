@@ -8,7 +8,7 @@ export class GameObject {
     wkt: string;
     isVisible: boolean;
     isActive: boolean;
-    actions: Map<EventTypes, GameActions[]> = new Map();
+    actions: Map<EventTypes, string> = new Map();
 
     constructor(id: string, name: string, zone: string, isVisible: boolean, isActive: boolean){
         this.id = id;
@@ -26,18 +26,18 @@ export class GameObject {
         this.isActive = state;
     }
 
-    addAction(type: EventTypes, actions: GameActions) {
-        const typelist = this.actions.get(type);
+    addActions(type: EventTypes, actionIds: string) {
+        let typelist: string = this.actions.get(type);
         if (typelist !== null && typelist !== undefined) {
-            typelist.push(actions);
+            typelist = typelist + ';' + actionIds;
         } else {
-            this.actions.set(type, [actions]);
+            this.actions.set(type, actionIds);
         }
     }
 
-    getActions(eventType: EventTypes): GameActions {
+    getActions(eventType: EventTypes): string {
         const actionList = this.actions.get(eventType);
-        return (actionList !== null && actionList !== undefined) ? actionList[0] : null;
+        return (actionList !== null && actionList !== undefined) ? actionList : null;
     }
 
 

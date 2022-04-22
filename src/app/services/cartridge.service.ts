@@ -7,6 +7,7 @@ import { CartStart } from '../model/cartridge/cart-start';
 import { GameLocation } from '../model/utils/game-location';
 import { ObjectTypes } from '../model/utils/object-types.enum';
 import { GameStateService } from './game-state.service';
+import { ActionsService } from './actions.service';
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +17,8 @@ export class CartridgeService {
   private cartridge;
 
   constructor(
-    private game: GameStateService,
+    private actions: ActionsService,
+    private gamestate: GameStateService,
     private httpClient: HttpClient
   ) { }
 
@@ -31,7 +33,7 @@ export class CartridgeService {
 
   private handleCartridge() {
     const actions: Map<string, GameAction> = new Map();
-    this.game.start.set(
+    this.gamestate.start.set(
       new CartStart(
         new View({
           center: new GameLocation(this.cartridge.start.view.center[0], this.cartridge.start.view.center[1], 'EPSG:4326').getCoords(),
@@ -41,20 +43,20 @@ export class CartridgeService {
       )
     );
     this.cartridge.actions.forEach((action) => {
-      actions.set(action.id, new GameAction(action.id, action.type, action.name, action.payload));
+      this.actions.set(action.id, new GameAction(action.id, action.type, action.name, action.payload));
     });
     this.cartridge.zones.forEach((zone) => {
-      this.game.zones.add(zone.zone, zone.id, zone.name, zone.isVisible, zone.isActive);
+      this.gamestate.zones.add(zone.zone, zone.id, zone.name, zone.isVisible, zone.isActive);
       zone.actions.forEach((action) => {
-        const ids = action.ids.split(';');
-        const acts = new GameActions();
-        ids.forEach((id) => {
-          acts.add(actions.get(id));
-        });
-        this.game.actions.add(ObjectTypes.eZone, zone.id, action.event, acts);
+        // const ids = action.ids.split(';');
+        // const acts = new GameActions();
+        // ids.forEach((id) => {
+        //   acts.add(actions.get(id));
+        // });
+        this.gamestate.actions.add(ObjectTypes.eZone, zone.id, action.event, action.ids);
       });
     });
-    this.game.run();
+    this.gamestate.run();
   }
 
 }

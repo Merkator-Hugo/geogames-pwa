@@ -33,7 +33,7 @@
         "actions": [
           {
             "event": "zoneOnEnter",
-            "ids": "#action3"
+            "ids": "#action3;#action8"
           },
           {
             "event": "zoneOnLeave",
@@ -84,6 +84,24 @@
         "type": "setActivation",
         "name": "",
         "payload": { "type": "zone", "id": "#zone0", "state": false }
+      },
+      {
+        "id": "#action8",
+        "type": "answerQuestion",
+        "name": "",
+        "payload": { "question": "How many days has 1 week ?", "answer": ["3"], "actions": ["#action9", "#action10"] }
+      },
+      {
+        "id": "#action9",
+        "type": "sendMessage",
+        "name": "",
+        "payload": { "message": "the answer is right"}
+      },
+      {
+        "id": "#action10",
+        "type": "sendMessage",
+        "name": "",
+        "payload": { "message": "the answer is wrong"}
       }
     ]
   }

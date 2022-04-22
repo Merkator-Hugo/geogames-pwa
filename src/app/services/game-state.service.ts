@@ -58,11 +58,11 @@ export class GameStateService {
     count: (): number => this.toolsObject.length
   };
   public actions = {
-    add: (objectType: ObjectTypes, id: string, event: EventTypes, actions: GameActions): void => {
+    add: (objectType: ObjectTypes, id: string, event: EventTypes, actionIds: string): void => {
       switch(objectType) {
         case ObjectTypes.eZone:
           const object = this.zonesObject.find((z) => z.id === id);
-          object.addAction(event, actions);
+          object.addActions(event, actionIds);
           break;
       }
     },
