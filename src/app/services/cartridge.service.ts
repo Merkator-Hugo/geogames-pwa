@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import View from 'ol/View';
 import { GameAction } from '../model/actions/game-action';
-import { GameActions } from '../model/actions/game-actions';
 import { CartStart } from '../model/cartridge/cart-start';
 import { GameLocation } from '../model/utils/game-location';
 import { ObjectTypes } from '../model/utils/object-types.enum';
@@ -48,11 +47,6 @@ export class CartridgeService {
     this.cartridge.zones.forEach((zone) => {
       this.gamestate.zones.add(zone.zone, zone.id, zone.name, zone.isVisible, zone.isActive);
       zone.actions.forEach((action) => {
-        // const ids = action.ids.split(';');
-        // const acts = new GameActions();
-        // ids.forEach((id) => {
-        //   acts.add(actions.get(id));
-        // });
         this.gamestate.actions.add(ObjectTypes.eZone, zone.id, action.event, action.ids);
       });
     });

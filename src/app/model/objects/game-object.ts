@@ -1,5 +1,3 @@
-import { GameAction } from '../actions/game-action';
-import { GameActions } from '../actions/game-actions';
 import { EventTypes } from '../utils/event-types.enum';
 
 export class GameObject {

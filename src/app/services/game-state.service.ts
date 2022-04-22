@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import View from 'ol/View';
-import { GameActions } from '../model/actions/game-actions';
 import { CartStart } from '../model/cartridge/cart-start';
 import { ObjectRef } from '../model/objects/object-ref';
 import { PersonObject } from '../model/objects/person-object';
