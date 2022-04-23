@@ -33,21 +33,8 @@ export class GameLocation {
         this.lon += speed;
     }
 
-    // move(direction: Directions, speed: number): void {
-    //     switch(direction) {
-    //       case Directions.eUp:
-    //         this.lat += speed;
-    //         break;
-    //       case Directions.eDown:
-    //         this.lat -= speed;
-    //         break;
-    //       case Directions.eLeft:
-    //         this.lon -= speed;
-    //         break;
-    //       case Directions.eRight:
-    //         this.lon += speed;
-    //         break;
-    //     }
-    // }
+    format(fixed: number): string {
+        return (this.lon.toFixed(fixed) + '/' + this.lat.toFixed(fixed));
+    }
 
 }

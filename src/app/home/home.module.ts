@@ -9,6 +9,7 @@ import { OpenlayersComponent } from '../components/openlayers/openlayers.compone
 import { MenuComponent } from '../components/menu/menu.component';
 import { ZoneListComponent } from '../components/zone-list/zone-list.component';
 
+import { Geolocation } from '@ionic-native/geolocation/ngx';
 
 @NgModule({
   imports: [
@@ -22,7 +23,8 @@ import { ZoneListComponent } from '../components/zone-list/zone-list.component';
     MenuComponent,
     ZoneListComponent,
     HomePage
-  ]
+  ],
+  providers: [Geolocation]
 })
 
 export class HomePageModule {}

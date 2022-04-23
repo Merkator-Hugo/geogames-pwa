@@ -6,6 +6,16 @@
         <ion-icon name="close-outline"></ion-icon>
       </ion-button>
     </ion-list-header>
+    <!-- <ion-item>
+      <ion-icon name="download-outline" slot="start"></ion-icon>
+      <ion-segment (ionChange)="segmentChanged($event)">
+        <div *ngFor="let mode of gamestate.modes">
+          <ion-segment-button value="mode.value">
+            <ion-label>{{mode.label}}</ion-label>
+          </ion-segment-button>
+        </div>
+      </ion-segment>
+    </ion-item> -->
     <ion-item (click)="loadGame($event)">
       <ion-icon name="download-outline" slot="start"></ion-icon>
       <ion-label>Load Game</ion-label>

@@ -15,7 +15,6 @@ import { MapService } from '../services/map.service';
 })
 export class HomePage implements OnInit {
 
-  // public location = '';
   public speed = 10;
 
   constructor(
@@ -23,12 +22,21 @@ export class HomePage implements OnInit {
     public gameloop: GameLoopService,
     private cartRidge: CartridgeService,
     public modalController: ModalController,
-    private mapService: MapService
+    private mapService: MapService,
+    private geolocation: Geolocation
     ) {}
 
   ngOnInit(){
-    // this.location = this.formatLocation(this.gamestate.player.location.get().getCoords());
-    this.setDemo();
+    // if (this.gamestate.gameMode.isDemo()) {
+    //   this.cartRidge.load();
+    // } else if (this.gamestate.gameMode.isPlay()) {
+    //   const watch = this.geolocation.watchPosition(
+    //     (data) => {
+    //       // data can be a set of coordinates, or an error (if an error occurred).
+    //       // data.coords.latitude
+    //       // data.coords.longitude
+    //     });
+    // }
   }
 
   async openMenu() {
@@ -96,15 +104,6 @@ export class HomePage implements OnInit {
     if (this.speed < 10) {
       this.speed = 10;
     }
-  }
-
-  private setDemo() {
-    this.gamestate.demo.set(true);
-    this.cartRidge.load();
-  }
-
-  private formatLocation(location: number[]): string {
-    return (location[0].toFixed(0) + '/' + location[1].toFixed(0));
   }
 
 }
