@@ -16,6 +16,7 @@ import { MapService } from '../services/map.service';
 export class HomePage implements OnInit {
 
   public speed = 10;
+  eDirections = Directions;
 
   constructor(
     public gamestate: GameStateService,

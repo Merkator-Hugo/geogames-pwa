@@ -1,9 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AlertController } from '@ionic/angular';
 import { GameAction } from '../model/actions/game-action';
-import { GameActions } from '../model/actions/game-actions';
 import { ActionTypes } from '../model/utils/action-types.enum';
-import { EventTypes } from '../model/utils/event-types.enum';
 import { ObjectTypes } from '../model/utils/object-types.enum';
 import { GameStateService } from './game-state.service';
 import { UtilsService } from './utils.service';
