@@ -1,4 +1,4 @@
-import { ObjectTypes } from '../utils/object-types.enum';
+import { ObjectTypes } from '../enums/object-types.enum';
 
 export class ObjectRef {
     id: string;

@@ -1,4 +1,4 @@
-import { ActionTypes } from '../utils/action-types.enum';
+import { ActionTypes } from '../enums/action-types.enum';
 
 export class GameAction {
     id: string;

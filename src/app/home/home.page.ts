@@ -2,11 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { MenuComponent } from '../components/menu/menu.component';
 import { ZoneListComponent } from '../components/zone-list/zone-list.component';
-import { Directions } from '../model/utils/directions.enum';
+import { Directions } from '../model/enums/directions.enum';
 import { CartridgeService } from '../services/cartridge.service';
 import { GameLoopService } from '../services/game-loop.service';
 import { GameStateService } from '../services/game-state.service';
 import { MapService } from '../services/map.service';
+import { Geolocation } from '@capacitor/geolocation';
 
 @Component({
   selector: 'app-home',
@@ -16,7 +17,7 @@ import { MapService } from '../services/map.service';
 export class HomePage implements OnInit {
 
   public speed = 10;
-  eDirections = Directions;
+  public eDirections = Directions;
 
   constructor(
     public gamestate: GameStateService,
@@ -24,20 +25,18 @@ export class HomePage implements OnInit {
     private cartRidge: CartridgeService,
     public modalController: ModalController,
     private mapService: MapService,
-    private geolocation: Geolocation
-    ) {}
+    ) {
+      this.gamestate.modeChanged.subscribe((newMode) => {
+        this.init();
+      });
+    }
 
   ngOnInit(){
-    // if (this.gamestate.gameMode.isDemo()) {
-    //   this.cartRidge.load();
-    // } else if (this.gamestate.gameMode.isPlay()) {
-    //   const watch = this.geolocation.watchPosition(
-    //     (data) => {
-    //       // data can be a set of coordinates, or an error (if an error occurred).
-    //       // data.coords.latitude
-    //       // data.coords.longitude
-    //     });
-    // }
+    this.init();
+  }
+
+  public rot(){
+    return 'rotate(270deg)';
   }
 
   async openMenu() {
@@ -72,7 +71,7 @@ export class HomePage implements OnInit {
     return await modal.present();
   }
 
-  move(event: any, direction: Directions) {
+  public move(event: any, direction: Directions) {
     event.stopPropagation();
     const currentLocation = this.gamestate.player.location.get();
     switch(direction) {
@@ -96,7 +95,7 @@ export class HomePage implements OnInit {
     this.gameloop.check();
   }
 
-  setSpeed(event: any, direction: number) {
+  public setSpeed(event: any, direction: number) {
     event.stopPropagation();
     this.speed += 10 * direction;
     if (this.speed > 50) {
@@ -107,4 +106,24 @@ export class HomePage implements OnInit {
     }
   }
 
+  private init() {
+    if (this.gamestate.gameMode.isDemo()) {
+      this.cartRidge.load();
+      // TODO unsubscribe to watch
+    } else if (this.gamestate.gameMode.isPlay()) {
+      this.cartRidge.clear();
+      const watch = Geolocation.watchPosition(
+        { enableHighAccuracy: true },
+        (data) => {
+          const currentLocation = this.gamestate.player.location.get();
+          currentLocation.setCoords([data.coords.longitude,data.coords.latitude], 'EPSG:4326');
+          this.mapService.player.refresh(currentLocation);
+          const view = this.mapService.view.get();
+          view.setCenter(currentLocation.getCoords());
+          this.mapService.view.refresh(view);
+          this.gameloop.check();
+        }
+      );
+    }
+  }
 }

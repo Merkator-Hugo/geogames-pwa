@@ -1,4 +1,4 @@
-import { EventTypes } from '../utils/event-types.enum';
+import { EventTypes } from '../enums/event-types.enum';
 
 export class GameObject {
     id: string;

@@ -1,14 +1,14 @@
-import { Injectable } from '@angular/core';
+import { EventEmitter, Injectable } from '@angular/core';
 import View from 'ol/View';
 import { CartStart } from '../model/cartridge/cart-start';
 import { ObjectRef } from '../model/objects/object-ref';
 import { PersonObject } from '../model/objects/person-object';
 import { ToolObject } from '../model/objects/tool-object';
 import { ZoneObject } from '../model/objects/zone-object';
-import { EventTypes } from '../model/utils/event-types.enum';
+import { EventTypes } from '../model/enums/event-types.enum';
 import { GameLocation } from '../model/utils/game-location';
-import { GameModes } from '../model/utils/game-modes.enum';
-import { ObjectTypes } from '../model/utils/object-types.enum';
+import { GameModes } from '../model/enums/game-modes.enum';
+import { ObjectTypes } from '../model/enums/object-types.enum';
 import { LocationService } from './location.service';
 import { MapService } from './map.service';
 
@@ -17,9 +17,14 @@ import { MapService } from './map.service';
 })
 export class GameStateService {
 
+  public modeChanged: EventEmitter<GameModes> = new EventEmitter();
+
   public gameMode = {
     getAll: (): GameModes[] => Object.values(GameModes).filter(item => isNaN(Number(item))),
-    set: (mode: GameModes): GameModes => this.currentGameMode = mode,
+    set: (mode: GameModes): void => {
+      this.currentGameMode = mode;
+      this.modeChanged.emit(this.currentGameMode);
+    },
     current: (): GameModes => this.currentGameMode,
     isPlay: (): boolean => this.currentGameMode === GameModes.ePlay,
     isDemo: (): boolean => this.currentGameMode === GameModes.eDemo,
@@ -37,6 +42,7 @@ export class GameStateService {
     }
   };
   public zones = {
+    clear: (): ZoneObject[] => this.zonesObject = [],
     count: (): number => this.zonesObject.filter((zone) => zone.isVisible).length,
     get: (): ZoneObject[] => this.zonesObject,
     add: (wkt: string, id: string, name: string, isVisible: boolean, isActive: boolean): void => {
@@ -60,9 +66,11 @@ export class GameStateService {
     }
   };
   public persons = {
+    clear: (): PersonObject[] => this.personsObject = [],
     count: (): number => this.personsObject.length
   };
   public tools = {
+    clear: (): ToolObject[] => this.toolsObject = [],
     count: (): number => this.toolsObject.length
   };
   public actions = {
@@ -75,10 +83,6 @@ export class GameStateService {
       }
     },
   };
-  // public demo = {
-  //   get: (): boolean => this.currentdemoState,
-  //   set: (state: boolean): boolean => this.demoState = state
-  // };
   private startValues: CartStart;
   private currentLocation: GameLocation;
   private zonesObject: ZoneObject[] = [];

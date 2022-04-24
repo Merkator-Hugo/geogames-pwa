@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { EventTypes } from '../model/utils/event-types.enum';
-import { ObjectTypes } from '../model/utils/object-types.enum';
+import { EventTypes } from '../model/enums/event-types.enum';
+import { ObjectTypes } from '../model/enums/object-types.enum';
 import { ActionsService } from './actions.service';
 import { GameStateService } from './game-state.service';
 import { MapService } from './map.service';
