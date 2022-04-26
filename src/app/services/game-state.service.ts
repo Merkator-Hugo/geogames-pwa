@@ -19,6 +19,13 @@ export class GameStateService {
 
   public modeChanged: EventEmitter<GameModes> = new EventEmitter();
 
+  public gui = {
+    showLocation: {
+      set: (state: boolean): boolean => this.showLocation = state,
+      get: (): boolean => this.showLocation,
+      toggle: (): boolean => this.showLocation = !this.showLocation
+    }
+  };
   public gameMode = {
     getAll: (): GameModes[] => Object.values(GameModes).filter(item => isNaN(Number(item))),
     set: (mode: GameModes): void => {
@@ -91,6 +98,7 @@ export class GameStateService {
   private checkedZones: ObjectRef[] = [];
   // private demoState: boolean;
   private currentGameMode: GameModes;
+  private showLocation: boolean;
 
   constructor(
     private locationService: LocationService,
@@ -107,6 +115,7 @@ export class GameStateService {
 
   private init() {
     this.currentGameMode = GameModes.eDemo;
+    this.showLocation = true; //false;
   }
 
 }

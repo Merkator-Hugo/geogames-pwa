@@ -8,6 +8,8 @@ import { HomePageRoutingModule } from './home-routing.module';
 import { OpenlayersComponent } from '../components/openlayers/openlayers.component';
 import { MenuComponent } from '../components/menu/menu.component';
 import { ZoneListComponent } from '../components/zone-list/zone-list.component';
+import { NavigatorComponent } from '../components/navigator/navigator.component';
+import { NavigatorIconComponent } from '../components/navigator-icon/navigator-icon.component';
 
 @NgModule({
   imports: [
@@ -17,6 +19,8 @@ import { ZoneListComponent } from '../components/zone-list/zone-list.component';
     HomePageRoutingModule
   ],
   declarations: [
+    NavigatorComponent,
+    NavigatorIconComponent,
     OpenlayersComponent,
     MenuComponent,
     ZoneListComponent,

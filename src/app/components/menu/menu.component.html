@@ -16,6 +16,10 @@
         </div>
       </ion-segment>
     </ion-item>
+    <ion-item (click)="toggleShowLocation($event)">
+      <ion-icon name="locate-outline" slot="start"></ion-icon>
+      <ion-label>Show location</ion-label>
+    </ion-item>
     <ion-item (click)="loadGame($event)">
       <ion-icon name="download-outline" slot="start"></ion-icon>
       <ion-label>Load Game</ion-label>

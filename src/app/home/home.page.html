@@ -20,7 +20,7 @@
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
-  <ion-toolbar>
+  <ion-toolbar *ngIf="gamestate.gui.showLocation.get()">
     <ion-buttons slot="start">
       <ion-button>
         <ion-icon name="locate-outline"></ion-icon>
@@ -28,8 +28,9 @@
       </ion-button>
     </ion-buttons>
     <ion-buttons slot="end">
-      <ion-button>
-        <ion-icon name="navigate-outline"></ion-icon>
+      <ion-button (click)="openNavigator()">
+        <app-navigator-icon [size]="26"></app-navigator-icon>
+        <!-- <ion-icon name="navigate-outline"></ion-icon> -->
         &nbsp;345 m
       </ion-button>
     </ion-buttons>

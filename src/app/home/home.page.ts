@@ -8,6 +8,8 @@ import { GameLoopService } from '../services/game-loop.service';
 import { GameStateService } from '../services/game-state.service';
 import { MapService } from '../services/map.service';
 import { Geolocation } from '@capacitor/geolocation';
+import { actionSheetController } from '@ionic/core';
+import { NavigatorComponent } from '../components/navigator/navigator.component';
 
 @Component({
   selector: 'app-home',
@@ -18,6 +20,8 @@ export class HomePage implements OnInit {
 
   public speed = 10;
   public eDirections = Directions;
+
+  private watch;
 
   constructor(
     public gamestate: GameStateService,
@@ -50,7 +54,7 @@ export class HomePage implements OnInit {
   async openZoneList() {
     const modal = await this.modalController.create({
       component: ZoneListComponent,
-      cssClass: 'modal-class'
+      cssClass: '-list-modal-class'
     });
     return await modal.present();
   }
@@ -58,7 +62,7 @@ export class HomePage implements OnInit {
   async openPersonList() {
     const modal = await this.modalController.create({
       component: ZoneListComponent,
-      cssClass: 'modal-class'
+      cssClass: 'list-modal-class'
     });
     return await modal.present();
   }
@@ -66,7 +70,15 @@ export class HomePage implements OnInit {
   async openToolList() {
     const modal = await this.modalController.create({
       component: ZoneListComponent,
-      cssClass: 'modal-class'
+      cssClass: 'list-modal-class'
+    });
+    return await modal.present();
+  }
+
+  async openNavigator() {
+    const modal = await this.modalController.create({
+      component: NavigatorComponent,
+      cssClass: 'navigator-modal-class'
     });
     return await modal.present();
   }
@@ -109,10 +121,10 @@ export class HomePage implements OnInit {
   private init() {
     if (this.gamestate.gameMode.isDemo()) {
       this.cartRidge.load();
-      // TODO unsubscribe to watch
+      this.watch.unsubscribe();
     } else if (this.gamestate.gameMode.isPlay()) {
       this.cartRidge.clear();
-      const watch = Geolocation.watchPosition(
+      this.watch = Geolocation.watchPosition(
         { enableHighAccuracy: true },
         (data) => {
           const currentLocation = this.gamestate.player.location.get();

@@ -44,4 +44,8 @@ export class MenuComponent implements OnInit {
     }
   }
 
+  toggleShowLocation($event) {
+    this.gamestate.gui.showLocation.toggle();
+  }
+
 }

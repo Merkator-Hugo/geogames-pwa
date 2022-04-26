@@ -25,10 +25,18 @@
 @import "~@ionic/angular/css/text-transformation.css";
 @import "~@ionic/angular/css/flex-utils.css";
 
-.modal-class {
+.list-modal-class {
     Top: 66px;
     left: 10px;
     right: 10px;
     bottom: 10px;
+    border-radius: 15px;
+}
+
+.navigator-modal-class {
+    width: 200px;
+    height: 200px;
+    top: calc((100vh - 200px) / 2);
+    left: calc((100vw - 200px) / 2);
     border-radius: 15px;
 }
