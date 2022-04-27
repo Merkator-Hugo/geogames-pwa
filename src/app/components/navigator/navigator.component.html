@@ -1,1 +1,12 @@
-<app-navigator-icon [size]="150" padding="25px"></app-navigator-icon>
+<ion-toolbar color="light">
+    <ion-title>Navigator</ion-title>
+    <ion-buttons slot="end">
+        <ion-button (click)="closeModal()">
+            <ion-icon name="close-outline"></ion-icon>
+          </ion-button>
+    </ion-buttons>
+</ion-toolbar>
+
+<div class="distance">{{gamestate.player.navigateTo.directions().formatDistance()}} m</div>
+<div class="distance">{{gamestate.player.navigateTo.directions().formatBearing()}} °</div>
+<app-navigator-icon [size]="150" [direction]="gamestate.player.navigateTo.directions().bearing" [name]="'big'"></app-navigator-icon>

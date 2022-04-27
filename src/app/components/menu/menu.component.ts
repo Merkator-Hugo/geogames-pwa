@@ -41,11 +41,13 @@ export class MenuComponent implements OnInit {
     if(Object.values(GameModes).includes(value)) {
       this.currentSegment = value;
       this.gamestate.gameMode.set(this.currentSegment);
+      this.modalController.dismiss();
     }
   }
 
   toggleShowLocation($event) {
     this.gamestate.gui.showLocation.toggle();
+    this.modalController.dismiss();
   }
 
 }

@@ -28,7 +28,7 @@ export class HomePage implements OnInit {
     public gameloop: GameLoopService,
     private cartRidge: CartridgeService,
     public modalController: ModalController,
-    private mapService: MapService,
+    // private mapService: MapService,
     ) {
       this.gamestate.modeChanged.subscribe((newMode) => {
         this.init();
@@ -46,7 +46,7 @@ export class HomePage implements OnInit {
   async openMenu() {
     const modal = await this.modalController.create({
       component: MenuComponent,
-      cssClass: 'modal-class'
+      cssClass: 'full-modal-class'
     });
     return await modal.present();
   }
@@ -54,7 +54,7 @@ export class HomePage implements OnInit {
   async openZoneList() {
     const modal = await this.modalController.create({
       component: ZoneListComponent,
-      cssClass: '-list-modal-class'
+      cssClass: 'full-modal-class'
     });
     return await modal.present();
   }
@@ -62,7 +62,7 @@ export class HomePage implements OnInit {
   async openPersonList() {
     const modal = await this.modalController.create({
       component: ZoneListComponent,
-      cssClass: 'list-modal-class'
+      cssClass: 'full-modal-class'
     });
     return await modal.present();
   }
@@ -70,7 +70,7 @@ export class HomePage implements OnInit {
   async openToolList() {
     const modal = await this.modalController.create({
       component: ZoneListComponent,
-      cssClass: 'list-modal-class'
+      cssClass: 'full-modal-class'
     });
     return await modal.present();
   }
@@ -78,6 +78,7 @@ export class HomePage implements OnInit {
   async openNavigator() {
     const modal = await this.modalController.create({
       component: NavigatorComponent,
+      backdropDismiss: false,
       cssClass: 'navigator-modal-class'
     });
     return await modal.present();
@@ -100,11 +101,13 @@ export class HomePage implements OnInit {
         currentLocation.changeLon(this.speed);
         break;
     }
-    this.mapService.player.refresh(currentLocation);
-    const view = this.mapService.view.get();
-    view.setCenter(currentLocation.getCoords());
-    this.mapService.view.refresh(view);
-    this.gameloop.check();
+    this.gamestate.player.location.set(currentLocation);
+    this.gameloop.move();
+    // this.mapService.player.refresh(currentLocation);
+    // const view = this.mapService.view.get();
+    // view.setCenter(currentLocation.getCoords());
+    // this.mapService.view.refresh(view);
+    // this.gameloop.check();
   }
 
   public setSpeed(event: any, direction: number) {
@@ -129,11 +132,8 @@ export class HomePage implements OnInit {
         (data) => {
           const currentLocation = this.gamestate.player.location.get();
           currentLocation.setCoords([data.coords.longitude,data.coords.latitude], 'EPSG:4326');
-          this.mapService.player.refresh(currentLocation);
-          const view = this.mapService.view.get();
-          view.setCenter(currentLocation.getCoords());
-          this.mapService.view.refresh(view);
-          this.gameloop.check();
+          this.gamestate.player.location.set(currentLocation);
+          this.gameloop.move();
         }
       );
     }

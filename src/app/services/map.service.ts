@@ -18,6 +18,7 @@ import { LocationService } from './location.service';
 import WKT from 'ol/format/WKT';
 import { ObjectRef } from '../model/objects/object-ref';
 import { ZoneObject } from '../model/objects/zone-object';
+import { Projection } from 'ol/proj';
 
 @Injectable({
 	providedIn: 'root'
@@ -39,7 +40,7 @@ export class MapService {
 				})
 			});
 			this.currentMap.on('click', (event) => {
-				alert(event.coordinate);
+				// alert(event.coordinate);
 			});
 			this.zones.createLayer();
 			setTimeout(() => {
@@ -109,6 +110,17 @@ export class MapService {
 			});
 			this.zonesLayer.getSource().addFeature(feature);
 		},
+		get: (zone): Feature => {
+			const source = this.zonesLayer.getSource();
+			const features = source.getFeatures();
+			let retVal = null;
+			features.forEach((feature) => {
+				if (feature.get('id') === zone.id) {
+					retVal = feature;
+				}
+			});
+			return retVal;
+		},
 		remove: (): void => {
 			// this.zonesLayer.getSource();
 		},
@@ -148,6 +160,13 @@ export class MapService {
 				}
 			);
 			return zones;
+		},
+		getCenter: (zone): GameLocation => {
+			const feature = this.zones.get(zone);
+			const extent = feature.getGeometry().getExtent();
+			const x = (extent[0]+extent[2])/2;
+			const y = (extent[1]+extent[3])/2;
+			return new GameLocation(x,y);
 		}
 	};
 

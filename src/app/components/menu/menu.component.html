@@ -1,11 +1,14 @@
+<ion-toolbar color="light">
+  <ion-title>Menu</ion-title>
+  <ion-buttons slot="end">
+      <ion-button (click)="closeModal()">
+          <ion-icon name="close-outline"></ion-icon>
+        </ion-button>
+  </ion-buttons>
+</ion-toolbar>
+
 <ion-content>
   <ion-list>
-    <ion-list-header>
-      <ion-label>Menu</ion-label>
-      <ion-button (click)="closeModal()">
-        <ion-icon name="close-outline"></ion-icon>
-      </ion-button>
-    </ion-list-header>
     <ion-item>
       <ion-icon name="download-outline" slot="start"></ion-icon>
       <ion-segment (ionChange)="segmentChanged($event)" [(ngModel)]="currentSegment">

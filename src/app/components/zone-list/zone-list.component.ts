@@ -3,6 +3,7 @@ import { ModalController } from '@ionic/angular';
 import { ZoneObject } from 'src/app/model/objects/zone-object';
 import { CartridgeService } from 'src/app/services/cartridge.service';
 import { GameStateService } from 'src/app/services/game-state.service';
+import { MapService } from 'src/app/services/map.service';
 
 @Component({
   selector: 'app-zone-list',
@@ -12,18 +13,31 @@ import { GameStateService } from 'src/app/services/game-state.service';
 export class ZoneListComponent implements OnInit {
 
   public zones: ZoneObject[] = [];
+  public show: boolean[];
 
   constructor(
     public game: GameStateService,
+    public map: MapService,
     public modalController: ModalController
   ) { }
 
   ngOnInit() {
     this.zones = this.game.zones.get();
-    const x = 1;
+    this.show = [];
+    this.zones.forEach((z) => {
+      this.show.push(false);
+    });
   }
 
   closeModal() {
+    this.modalController.dismiss();
+  }
+
+  navigateTo(event, zone) {
+    this.game.player.navigateTo.clear();
+    const point = this.map.zones.getCenter(zone);
+    this.game.player.navigateTo.set(point);
+    this.game.player.navigateTo.directions();
     this.modalController.dismiss();
   }
 

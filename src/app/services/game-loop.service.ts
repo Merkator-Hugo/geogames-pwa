@@ -16,6 +16,15 @@ export class GameLoopService {
     private actions: ActionsService
   ) { }
 
+  public move() {
+    const currentLocation = this.gamestate.player.location.get();
+    this.mapService.player.refresh(currentLocation);
+    const view = this.mapService.view.get();
+    view.setCenter(currentLocation.getCoords());
+    this.mapService.view.refresh(view);
+    this.check();
+  }
+
   public check() {
     const oldCheckedZones = this.gamestate.zones.checked.get().map(e => ({ ... e }));
     const newCheckedZones = this.mapService.zones.check(this.gamestate.player.location.get());

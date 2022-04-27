@@ -1,18 +1,30 @@
+<ion-toolbar color="light">
+  <ion-title>Zones</ion-title>
+  <ion-buttons slot="end">
+    <ion-button (click)="closeModal()">
+      <ion-icon name="close-outline"></ion-icon>
+    </ion-button>
+  </ion-buttons>
+</ion-toolbar>
 
+<ion-content>
   <ion-list>
-    <ion-list-header>
-      <ion-label>Zones</ion-label>
-      <ion-button (click)="closeModal()">
-        <ion-icon name="close-outline"></ion-icon>
-      </ion-button>
-    </ion-list-header>
-    <div *ngFor="let zone of zones">
-      <ion-item *ngIf="zone.isVisible">
+    <div *ngFor="let zone of zones; let i = index">
+      <ion-item *ngIf="zone.isVisible" [lines]="show[i] ? 'none' : 'full'">
         <ion-icon name="shapes-outline" slot="start"></ion-icon>
         <ion-label>{{zone.name}}</ion-label>
         <div *ngIf="zone.isActive === false">
           <ion-icon name="warning-outline" slot="end"></ion-icon>
         </div>
+        <ion-icon name="chevron-down-outline" slot="end" *ngIf="!show[i]" (click)="show[i]=!show[i]"></ion-icon>
+        <ion-icon name="chevron-up-outline" slot="end" *ngIf="show[i]" (click)="show[i]=!show[i]"></ion-icon>
+      </ion-item>
+      <ion-item *ngIf="show[i]" lines="full">
+        <ion-icon name="" slot="start"></ion-icon>
+        <ion-label>{{zone.description}}</ion-label>
+        <ion-icon name="navigate-outline" slot="end" (click)="navigateTo($event, zone)"></ion-icon>
+
       </ion-item>
     </div>
   </ion-list>
+</ion-content>

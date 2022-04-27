@@ -11,6 +11,10 @@ import { GameModes } from '../model/enums/game-modes.enum';
 import { ObjectTypes } from '../model/enums/object-types.enum';
 import { LocationService } from './location.service';
 import { MapService } from './map.service';
+import { GameObject } from '../model/objects/game-object';
+import * as turf from '@turf/turf'
+import Units from 'ol/proj/Units';
+import { GameDirections } from '../model/utils/game-directions';
 
 @Injectable({
   providedIn: 'root'
@@ -24,6 +28,12 @@ export class GameStateService {
       set: (state: boolean): boolean => this.showLocation = state,
       get: (): boolean => this.showLocation,
       toggle: (): boolean => this.showLocation = !this.showLocation
+    },
+    updateArrow: () => {
+      const arrows = document.getElementsByClassName('svgArrow');
+      Array.from(arrows).forEach(arrow => {
+        arrow.setAttribute('transform', 'rotate('+ this.player.navigateTo.directions().bearing +' 30 30)');
+      });
     }
   };
   public gameMode = {
@@ -45,7 +55,25 @@ export class GameStateService {
   public player = {
     location: {
       get: (): GameLocation => this.currentLocation,
-      set: (location: GameLocation): GameLocation => this.currentLocation = location
+      set: (location: GameLocation): void => {
+        this.currentLocation = location;
+        this.gui.updateArrow();
+      }
+    },
+    navigateTo: {
+      clear: (): GameLocation => this.navigateTo = null, 
+      set: (point: GameLocation): void => {
+        this.navigateTo = point;
+        this.gui.updateArrow();
+      },
+      directions: (): GameDirections => {
+        const from = turf.point(this.player.location.get().getCoords('EPSG:4326'));
+        const to = turf.point(this.navigateTo.getCoords('EPSG:4326'));
+        const distance = turf.distance(from, to);
+        const bearing = turf.bearing(from, to);
+        return new GameDirections((distance*1000), bearing);
+      },
+      isNavigating: (): boolean => this.navigateTo !== null,
     }
   };
   public zones = {
@@ -96,9 +124,9 @@ export class GameStateService {
   private personsObject: PersonObject[] = [];
   private toolsObject: ToolObject[] = [];
   private checkedZones: ObjectRef[] = [];
-  // private demoState: boolean;
   private currentGameMode: GameModes;
   private showLocation: boolean;
+  private navigateTo: GameLocation;
 
   constructor(
     private locationService: LocationService,
@@ -116,6 +144,7 @@ export class GameStateService {
   private init() {
     this.currentGameMode = GameModes.eDemo;
     this.showLocation = true; //false;
+    this.navigateTo = null;
   }
 
 }

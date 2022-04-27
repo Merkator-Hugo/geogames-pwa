@@ -20,7 +20,7 @@
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
-  <ion-toolbar *ngIf="gamestate.gui.showLocation.get()">
+  <!-- <ion-toolbar *ngIf="gamestate.gui.showLocation.get()">
     <ion-buttons slot="start">
       <ion-button>
         <ion-icon name="locate-outline"></ion-icon>
@@ -29,15 +29,28 @@
     </ion-buttons>
     <ion-buttons slot="end">
       <ion-button (click)="openNavigator()">
-        <app-navigator-icon [size]="26"></app-navigator-icon>
-        <!-- <ion-icon name="navigate-outline"></ion-icon> -->
+        <app-navigator-icon [size]="26" [direction]="200"></app-navigator-icon>
         &nbsp;345 m
       </ion-button>
     </ion-buttons>
-  </ion-toolbar>
+  </ion-toolbar> -->
 </ion-header>
 
 <ion-content [fullscreen]="true">
+    <ion-toolbar *ngIf="gamestate.gui.showLocation.get()">
+    <ion-buttons slot="start">
+      <ion-button>
+        <ion-icon name="locate-outline"></ion-icon>
+        &nbsp;{{gamestate.player.location.get().format(4)}}
+      </ion-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-button (click)="openNavigator()" *ngIf="gamestate.player.navigateTo.isNavigating()">
+        <app-navigator-icon [size]="26" [direction]="gamestate.player.navigateTo.directions().bearing" [name]="'small'"></app-navigator-icon>
+        &nbsp;{{gamestate.player.navigateTo.directions().formatDistance(0)}} m
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
 	<app-openlayers></app-openlayers>
 </ion-content>
 
