@@ -1,5 +1,5 @@
 import { transform } from 'ol/proj';
-import { Directions } from './directions.enum';
+import { Directions } from '../enums/directions.enum';
 
 export class GameLocation {
     private srid = 'EPSG:3857';
@@ -25,6 +25,12 @@ export class GameLocation {
         }
     }
 
+    setCoords(coords: number[], srid: string) {
+        const transformed = transform(coords, srid, this.srid);
+        this.lon = transformed[0];
+        this.lat = transformed[1];
+    }
+
     changeLat(speed: number) {
         this.lat += speed;
     }
@@ -33,21 +39,13 @@ export class GameLocation {
         this.lon += speed;
     }
 
-    // move(direction: Directions, speed: number): void {
-    //     switch(direction) {
-    //       case Directions.eUp:
-    //         this.lat += speed;
-    //         break;
-    //       case Directions.eDown:
-    //         this.lat -= speed;
-    //         break;
-    //       case Directions.eLeft:
-    //         this.lon -= speed;
-    //         break;
-    //       case Directions.eRight:
-    //         this.lon += speed;
-    //         break;
-    //     }
-    // }
+    format(fixed: number): string {
+        const latlon = this.getCoords('EPSG:4326');
+        const lat = latlon[1];
+        const lon = latlon[0];
+        const latLabel = (lat > 0) ? 'N' : 'S';
+        const lonLabel = (lon > 0) ? 'E' : 'W';
+        return (latLabel + ' ' + lat.toFixed(fixed) + ' / ' +lonLabel + ' ' +  lon.toFixed(fixed));
+    }
 
 }

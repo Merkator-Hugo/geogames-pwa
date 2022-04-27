@@ -4,7 +4,7 @@ import View from 'ol/View';
 import { GameAction } from '../model/actions/game-action';
 import { CartStart } from '../model/cartridge/cart-start';
 import { GameLocation } from '../model/utils/game-location';
-import { ObjectTypes } from '../model/utils/object-types.enum';
+import { ObjectTypes } from '../model/enums/object-types.enum';
 import { GameStateService } from './game-state.service';
 import { ActionsService } from './actions.service';
 
@@ -20,6 +20,13 @@ export class CartridgeService {
     private gamestate: GameStateService,
     private httpClient: HttpClient
   ) { }
+
+  clear() {
+    this.gamestate.zones.clear();
+    this.gamestate.persons.clear();
+    this.gamestate.tools.clear();
+    this.actions.clear();
+  }
 
   load() {
     this.httpClient.get('/assets/cartridges/test.json').subscribe(

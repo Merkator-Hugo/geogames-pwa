@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { EventTypes } from '../model/utils/event-types.enum';
-import { ObjectTypes } from '../model/utils/object-types.enum';
+import { EventTypes } from '../model/enums/event-types.enum';
+import { ObjectTypes } from '../model/enums/object-types.enum';
 import { ActionsService } from './actions.service';
 import { GameStateService } from './game-state.service';
 import { MapService } from './map.service';
@@ -15,6 +15,15 @@ export class GameLoopService {
     private mapService: MapService,
     private actions: ActionsService
   ) { }
+
+  public move() {
+    const currentLocation = this.gamestate.player.location.get();
+    this.mapService.player.refresh(currentLocation);
+    const view = this.mapService.view.get();
+    view.setCenter(currentLocation.getCoords());
+    this.mapService.view.refresh(view);
+    this.check();
+  }
 
   public check() {
     const oldCheckedZones = this.gamestate.zones.checked.get().map(e => ({ ... e }));

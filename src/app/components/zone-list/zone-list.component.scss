@@ -1,4 +1,8 @@
-// ion-label > ion-icon {
-//     width: 22px;
-//     height: 22px;
-// }
+ion-item.full-item-bottom {
+    border: solid 1px grey;
+    border-top: none;
+}
+ion-item.full-item-top {
+    border: solid 1px grey;
+    border-bottom: none;
+}

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
+import { GameModes } from 'src/app/model/enums/game-modes.enum';
 import { CartridgeService } from 'src/app/services/cartridge.service';
 import { GameStateService } from 'src/app/services/game-state.service';
 
@@ -10,13 +11,19 @@ import { GameStateService } from 'src/app/services/game-state.service';
 })
 export class MenuComponent implements OnInit {
 
+  public gameModes: GameModes[];
+  public currentSegment: GameModes;
+
   constructor(
-    public game: GameStateService,
+    public gamestate: GameStateService,
     private cartRidge: CartridgeService,
     public modalController: ModalController
   ) { }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.gameModes = this.gamestate.gameMode.getAll();
+    this.currentSegment = this.gamestate.gameMode.current();
+  }
 
   closeModal() {
     this.modalController.dismiss();
@@ -25,6 +32,21 @@ export class MenuComponent implements OnInit {
   loadGame(event: any) {
     event.stopPropagation();
     this.cartRidge.load();
+    this.modalController.dismiss();
+  }
+
+  segmentChanged(event){
+    // console.log(event);
+    const value = event.detail.value;
+    if(Object.values(GameModes).includes(value)) {
+      this.currentSegment = value;
+      this.gamestate.gameMode.set(this.currentSegment);
+      this.modalController.dismiss();
+    }
+  }
+
+  toggleShowLocation($event) {
+    this.gamestate.gui.showLocation.toggle();
     this.modalController.dismiss();
   }
 

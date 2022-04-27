@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { AlertController } from '@ionic/angular';
 import { GameAction } from '../model/actions/game-action';
-import { ActionTypes } from '../model/utils/action-types.enum';
-import { ObjectTypes } from '../model/utils/object-types.enum';
+import { ActionTypes } from '../model/enums/action-types.enum';
+import { ObjectTypes } from '../model/enums/object-types.enum';
 import { GameStateService } from './game-state.service';
 import { UtilsService } from './utils.service';
 
@@ -18,6 +18,10 @@ export class ActionsService {
     private gamestate: GameStateService,
     public alertController: AlertController
   ) { }
+
+  public clear() {
+    this.actions = new Map();
+  }
 
   public set(id: string, action: GameAction) {
     this.actions.set(id, action);

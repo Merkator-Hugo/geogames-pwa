@@ -1,11 +1,28 @@
+<ion-toolbar color="light">
+  <ion-title>Menu</ion-title>
+  <ion-buttons slot="end">
+      <ion-button (click)="closeModal()">
+          <ion-icon name="close-outline"></ion-icon>
+        </ion-button>
+  </ion-buttons>
+</ion-toolbar>
+
 <ion-content>
   <ion-list>
-    <ion-list-header>
-      <ion-label>Menu</ion-label>
-      <ion-button (click)="closeModal()">
-        <ion-icon name="close-outline"></ion-icon>
-      </ion-button>
-    </ion-list-header>
+    <ion-item>
+      <ion-icon name="download-outline" slot="start"></ion-icon>
+      <ion-segment (ionChange)="segmentChanged($event)" [(ngModel)]="currentSegment">
+        <div *ngFor="let mode of gamestate.gameMode.getAll()">
+          <ion-segment-button value="{{mode}}">
+            <ion-label>{{mode}}</ion-label>
+          </ion-segment-button>
+        </div>
+      </ion-segment>
+    </ion-item>
+    <ion-item (click)="toggleShowLocation($event)">
+      <ion-icon name="locate-outline" slot="start"></ion-icon>
+      <ion-label>Show location</ion-label>
+    </ion-item>
     <ion-item (click)="loadGame($event)">
       <ion-icon name="download-outline" slot="start"></ion-icon>
       <ion-label>Load Game</ion-label>
