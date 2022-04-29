@@ -1,0 +1,16 @@
+<ion-item lines="full" color="light">
+  <ion-icon name="flash-outline" slot="start"></ion-icon>
+  <ion-badge color="light" slot="start">{{editService.actions.count()}}</ion-badge>
+  <ion-label>Actions</ion-label>
+  <ion-icon name="add-outline" slot="end" (click)="addAction()"></ion-icon>
+  <ion-icon name="chevron-down-outline" slot="end" *ngIf="!showActions" (click)="toggleShowActions()"></ion-icon>
+  <ion-icon name="chevron-up-outline" slot="end" *ngIf="showActions" (click)="toggleShowActions()"></ion-icon>
+</ion-item>
+<div *ngIf="showActions">
+  <ion-item *ngFor="let action of editService.actions.get(); let j = index" lines="full" (click)="showAction()">
+    <ion-icon name="flash-outline" slot="start"></ion-icon>
+    <ion-label>{{action.id}}: {{action.name}}</ion-label>
+    <!-- <ion-icon name="chevron-down-outline" slot="end" *ngIf="!showAction[j]" (click)="showAction[j]=!showAction[j]"></ion-icon>
+    <ion-icon name="chevron-up-outline" slot="end" *ngIf="showAction[j]" (click)="showAction[j]=!showAction[j]"></ion-icon> -->
+  </ion-item>
+</div>

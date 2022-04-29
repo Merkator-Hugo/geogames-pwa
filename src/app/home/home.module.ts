@@ -10,6 +10,10 @@ import { MenuComponent } from '../components/menu/menu.component';
 import { ZoneListComponent } from '../components/zone-list/zone-list.component';
 import { NavigatorComponent } from '../components/navigator/navigator.component';
 import { NavigatorIconComponent } from '../components/navigator-icon/navigator-icon.component';
+import { EditSmallscreenComponent } from '../components/edit-smallscreen/edit-smallscreen.component';
+import { EditWidescreenComponent } from '../components/edit-widescreen/edit-widescreen.component';
+import { EditListZonesComponent } from '../components/edit-list-zones/edit-list-zones.component';
+import { EditListActionsComponent } from '../components/edit-list-actions/edit-list-actions.component';
 
 @NgModule({
   imports: [
@@ -23,6 +27,10 @@ import { NavigatorIconComponent } from '../components/navigator-icon/navigator-i
     NavigatorIconComponent,
     OpenlayersComponent,
     MenuComponent,
+    EditSmallscreenComponent,
+    EditWidescreenComponent,
+    EditListZonesComponent,
+    EditListActionsComponent,
     ZoneListComponent,
     HomePage
   ]

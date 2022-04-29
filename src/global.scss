@@ -25,6 +25,12 @@
 @import "~@ionic/angular/css/text-transformation.css";
 @import "~@ionic/angular/css/flex-utils.css";
 
+ion-col.fixed-col {
+    flex: 0 0 350px;
+    padding:0;
+    margin-right:10px;
+}
+
 .full-modal-class {
     Top: 0px;
     left: 0px;

@@ -11,9 +11,7 @@ import { GameModes } from '../model/enums/game-modes.enum';
 import { ObjectTypes } from '../model/enums/object-types.enum';
 import { LocationService } from './location.service';
 import { MapService } from './map.service';
-import { GameObject } from '../model/objects/game-object';
-import * as turf from '@turf/turf'
-import Units from 'ol/proj/Units';
+import * as turf from '@turf/turf';
 import { GameDirections } from '../model/utils/game-directions';
 
 @Injectable({
@@ -34,6 +32,10 @@ export class GameStateService {
       Array.from(arrows).forEach(arrow => {
         arrow.setAttribute('transform', 'rotate('+ this.player.navigateTo.directions().bearing +' 30 30)');
       });
+    },
+    screenWidth: {
+      get: (): number => this.screenWidth,
+      set: (width: number): number => this.screenWidth = width
     }
   };
   public gameMode = {
@@ -45,12 +47,12 @@ export class GameStateService {
     current: (): GameModes => this.currentGameMode,
     isPlay: (): boolean => this.currentGameMode === GameModes.ePlay,
     isDemo: (): boolean => this.currentGameMode === GameModes.eDemo,
-    isCreate: (): boolean => this.currentGameMode === GameModes.eCreate
+    isEdit: (): boolean => this.currentGameMode === GameModes.eEdit,
   };
   public start = {
     set: (values: CartStart): CartStart => this.startValues = values,
-    getView: (): View => this.startValues.view,
-    getPlayer: (): GameLocation => this.startValues.player
+    getView: (): View => this.startValues.view.get(),
+    getPlayer: (): GameLocation => this.startValues.player.get()
   };
   public player = {
     location: {
@@ -61,7 +63,7 @@ export class GameStateService {
       }
     },
     navigateTo: {
-      clear: (): GameLocation => this.navigateTo = null, 
+      clear: (): GameLocation => this.navigateTo = null,
       set: (point: GameLocation): void => {
         this.navigateTo = point;
         this.gui.updateArrow();
@@ -127,6 +129,7 @@ export class GameStateService {
   private currentGameMode: GameModes;
   private showLocation: boolean;
   private navigateTo: GameLocation;
+  private screenWidth: number;
 
   constructor(
     private locationService: LocationService,
@@ -142,7 +145,7 @@ export class GameStateService {
   }
 
   private init() {
-    this.currentGameMode = GameModes.eDemo;
+    this.currentGameMode = GameModes.eDemo; // GameModes.eEdit; // GameModes.eDemo;
     this.showLocation = true; //false;
     this.navigateTo = null;
   }

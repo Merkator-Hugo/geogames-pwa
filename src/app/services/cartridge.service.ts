@@ -7,17 +7,20 @@ import { GameLocation } from '../model/utils/game-location';
 import { ObjectTypes } from '../model/enums/object-types.enum';
 import { GameStateService } from './game-state.service';
 import { ActionsService } from './actions.service';
+import { MapService } from './map.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CartridgeService {
 
+  private cartridgeUrl = '/assets/cartridges/test.json';
   private cartridge;
 
   constructor(
     private actions: ActionsService,
     private gamestate: GameStateService,
+    private mapService: MapService,
     private httpClient: HttpClient
   ) { }
 
@@ -26,9 +29,12 @@ export class CartridgeService {
     this.gamestate.persons.clear();
     this.gamestate.tools.clear();
     this.actions.clear();
+    this.mapService.player.clear();
+    this.mapService.zones.clear();
   }
 
   load() {
+    this.clear();
     this.httpClient.get('/assets/cartridges/test.json').subscribe(
       (result) => {
         this.cartridge = result;
@@ -37,17 +43,23 @@ export class CartridgeService {
     );
   }
 
+  get() {
+    return this.cartridge;
+  }
+
   private handleCartridge() {
     const actions: Map<string, GameAction> = new Map();
-    this.gamestate.start.set(
-      new CartStart(
-        new View({
-          center: new GameLocation(this.cartridge.start.view.center[0], this.cartridge.start.view.center[1], 'EPSG:4326').getCoords(),
-          zoom: this.cartridge.start.view.zoom
-        }),
-        new GameLocation(this.cartridge.start.player[0], this.cartridge.start.player[1], 'EPSG:4326')
-      )
+    const start = new CartStart();
+    start.view.set(
+      new View({
+        center: new GameLocation(this.cartridge.start.view.center[0], this.cartridge.start.view.center[1], 'EPSG:4326').getCoords(),
+        zoom: this.cartridge.start.view.zoom
+      })
     );
+    start.player.set(
+      new GameLocation(this.cartridge.start.player[0], this.cartridge.start.player[1], 'EPSG:4326')
+    );
+    this.gamestate.start.set(start);
     this.cartridge.actions.forEach((action) => {
       this.actions.set(action.id, new GameAction(action.id, action.type, action.name, action.payload));
     });

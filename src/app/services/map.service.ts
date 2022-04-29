@@ -57,6 +57,12 @@ export class MapService {
 	};
 	public player = {
 		add: (point: GameLocation): void => this.player.refresh(point),
+		clear: () => {
+			if (this.playerLayer !== null  && this.zonesLayer !== undefined) {
+				const source = this.playerLayer.getSource();
+				source.clear();
+			}
+		},
 		refresh: (point: GameLocation): void => {
 			if (this.playerLayer !== undefined) {
 				this.currentMap.removeLayer(this.playerLayer);
@@ -95,6 +101,12 @@ export class MapService {
 				  }
 			});
 			this.currentMap.addLayer(this.zonesLayer);
+		},
+		clear: () => {
+			if (this.zonesLayer !== null && this.zonesLayer !== undefined) {
+				const source = this.zonesLayer.getSource();
+				source.clear();
+			}
 		},
 		add: (zone: ZoneObject): void => {
 			const format = new WKT();
@@ -171,8 +183,8 @@ export class MapService {
 	};
 
 	private currentMap: Map;
-	private playerLayer;
-	private zonesLayer;
+	private playerLayer: VectorLayer<VectorSource>;
+	private zonesLayer: VectorLayer<VectorSource>;
 	private pointStyle = new Style({
 		image: new CircleStyle({
 			radius: 5,

@@ -5,7 +5,7 @@
         <ion-icon name="menu-outline"></ion-icon>
       </ion-button>
     </ion-buttons>
-    <ion-buttons slot="end">
+    <ion-buttons slot="end" *ngIf="!gamestate.gameMode.isEdit()">
       <ion-button (click)="openZoneList()">
         <ion-icon name="shapes-outline"></ion-icon>
         <ion-badge color="light">{{gamestate.zones.count()}}</ion-badge>
@@ -20,24 +20,10 @@
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
-  <!-- <ion-toolbar *ngIf="gamestate.gui.showLocation.get()">
-    <ion-buttons slot="start">
-      <ion-button>
-        <ion-icon name="locate-outline"></ion-icon>
-        &nbsp;{{gamestate.player.location.get().format(3)}}
-      </ion-button>
-    </ion-buttons>
-    <ion-buttons slot="end">
-      <ion-button (click)="openNavigator()">
-        <app-navigator-icon [size]="26" [direction]="200"></app-navigator-icon>
-        &nbsp;345 m
-      </ion-button>
-    </ion-buttons>
-  </ion-toolbar> -->
 </ion-header>
 
-<ion-content [fullscreen]="true">
-    <ion-toolbar *ngIf="gamestate.gui.showLocation.get()">
+<ion-content [fullscreen]="true" *ngIf="!gamestate.gameMode.isEdit()">
+  <ion-toolbar *ngIf="gamestate.gui.showLocation.get()">
     <ion-buttons slot="start">
       <ion-button>
         <ion-icon name="locate-outline"></ion-icon>
@@ -52,6 +38,11 @@
     </ion-buttons>
   </ion-toolbar>
 	<app-openlayers></app-openlayers>
+</ion-content>
+
+<ion-content [fullscreen]="true" *ngIf="gamestate.gameMode.isEdit()">
+  <app-edit-smallscreen *ngIf="gamestate.gui.screenWidth.get() < 400"></app-edit-smallscreen>
+  <app-edit-widescreen *ngIf="gamestate.gui.screenWidth.get()  >= 400"></app-edit-widescreen>
 </ion-content>
 
 <ion-fab vertical="bottom" horizontal="end" slot="fixed" *ngIf="gamestate.gameMode.isDemo()">

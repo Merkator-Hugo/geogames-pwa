@@ -1,0 +1,16 @@
+<ion-item lines="full" color="light">
+  <ion-icon name="shapes-outline" slot="start"></ion-icon>
+  <ion-badge color="light" slot="start">{{editService.zones.count()}}</ion-badge>
+  <ion-label>Zones</ion-label>
+  <ion-icon name="add-outline" slot="end" (click)="addZone()"></ion-icon>
+  <ion-icon name="chevron-down-outline" slot="end" *ngIf="!showZones" (click)="toggleShowZones()"></ion-icon>
+  <ion-icon name="chevron-up-outline" slot="end" *ngIf="showZones" (click)="toggleShowZones()"></ion-icon>
+</ion-item>
+<div *ngIf="showZones">
+  <ion-item *ngFor="let zone of editService.zones.get(); let i = index" lines="full" (click)="showZone(zone)">
+    <ion-icon name="shapes-outline" slot="start"></ion-icon>
+    <ion-label>{{zone.id}}: {{zone.name}}</ion-label>
+    <!-- <ion-icon name="chevron-down-outline" slot="end" *ngIf="!showZone[i]" (click)="showZone[i]=!showZone[i]"></ion-icon>
+    <ion-icon name="chevron-up-outline" slot="end" *ngIf="showZone[i]" (click)="showZone[i]=!showZone[i]"></ion-icon> -->
+  </ion-item>
+</div>
