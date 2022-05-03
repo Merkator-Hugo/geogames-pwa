@@ -1,6 +1,5 @@
 import { EventEmitter, Injectable } from '@angular/core';
 import View from 'ol/View';
-import { CartStart } from '../model/cartridge/cart-start';
 import { ObjectRef } from '../model/objects/object-ref';
 import { PersonObject } from '../model/objects/person-object';
 import { ToolObject } from '../model/objects/tool-object';
@@ -13,6 +12,7 @@ import { LocationService } from './location.service';
 import { MapService } from './map.service';
 import * as turf from '@turf/turf';
 import { GameDirections } from '../model/utils/game-directions';
+import { MainObject } from '../model/objects/main-object';
 
 @Injectable({
   providedIn: 'root'
@@ -35,8 +35,9 @@ export class GameStateService {
     },
     screenWidth: {
       get: (): number => this.screenWidth,
-      set: (width: number): number => this.screenWidth = width
-    }
+      set: (width: number): number => this.screenWidth = width,
+      isWide: (): boolean => this.screenWidth >= 400
+    },
   };
   public gameMode = {
     getAll: (): GameModes[] => Object.values(GameModes).filter(item => isNaN(Number(item))),
@@ -48,11 +49,30 @@ export class GameStateService {
     isPlay: (): boolean => this.currentGameMode === GameModes.ePlay,
     isDemo: (): boolean => this.currentGameMode === GameModes.eDemo,
     isEdit: (): boolean => this.currentGameMode === GameModes.eEdit,
+    isEditable: (): boolean => !this.main.code.isSealed()
   };
-  public start = {
-    set: (values: CartStart): CartStart => this.startValues = values,
-    getView: (): View => this.startValues.view.get(),
-    getPlayer: (): GameLocation => this.startValues.player.get()
+  public main = {
+    id: {
+      get: (): string => this.mainObject.id.get(),
+      set: (id: string): string => this.mainObject.id.set(id)
+    },
+    name: {
+      get: (): string => this.mainObject.name.get(),
+      set: (name: string): string => this.mainObject.id.set(name)
+    },
+    code: {
+      get: (): string => this.mainObject.code.get(),
+      set: (code: string): string => this.mainObject.id.set(code),
+      isSealed: (): boolean => (this.mainObject.code.isSealed())
+    },
+    view: {
+      set: (view: View): View => this.mainObject.view.set(view),
+      get: (): View => this.mainObject.view.get(),
+    },
+    player: {
+      set: (player: GameLocation): GameLocation => this.mainObject.player.set(player),
+      get: (): GameLocation => this.mainObject.player.get()
+    },
   };
   public player = {
     location: {
@@ -120,12 +140,12 @@ export class GameStateService {
       }
     },
   };
-  private startValues: CartStart;
-  private currentLocation: GameLocation;
+  private mainObject: MainObject;
   private zonesObject: ZoneObject[] = [];
   private personsObject: PersonObject[] = [];
   private toolsObject: ToolObject[] = [];
   private checkedZones: ObjectRef[] = [];
+  private currentLocation: GameLocation;
   private currentGameMode: GameModes;
   private showLocation: boolean;
   private navigateTo: GameLocation;
@@ -135,13 +155,14 @@ export class GameStateService {
     private locationService: LocationService,
     private mapService: MapService,
     ) {
+      this.mainObject = new MainObject();
     this.currentLocation = this.locationService.getCurrentLocation();
     this.init();
   }
 
   public run() {
-    this.mapService.view.refresh(this.start.getView());
-    this.mapService.player.add(this.start.getPlayer());
+    this.mapService.player.add(this.main.player.get());
+    this.mapService.view.refresh(this.main.view.get());
   }
 
   private init() {

@@ -12,7 +12,7 @@
     <div *ngFor="let zone of zones; let i = index">
       <ion-item *ngIf="zone.isVisible" [lines]="show[i] ? 'none' : 'full'">
         <ion-icon name="shapes-outline" slot="start"></ion-icon>
-        <ion-label>{{zone.name}}</ion-label>
+        <ion-label>{{zone.name.get()}}</ion-label>
         <div *ngIf="zone.isActive === false">
           <ion-icon name="warning-outline" slot="end"></ion-icon>
         </div>
@@ -21,7 +21,7 @@
       </ion-item>
       <ion-item *ngIf="show[i]" lines="full">
         <ion-icon name="" slot="start"></ion-icon>
-        <ion-label>{{zone.description}}</ion-label>
+        <ion-label>{{zone.description.get()}}</ion-label>
         <ion-icon name="navigate-outline" slot="end" (click)="navigateTo($event, zone)"></ion-icon>
 
       </ion-item>

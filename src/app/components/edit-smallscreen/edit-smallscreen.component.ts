@@ -15,4 +15,10 @@ export class EditSmallscreenComponent implements OnInit {
 
   ngOnInit() {}
 
+  close(){}
+
+  save(){
+    this.editService.cartridge.save();
+  }
+
 }

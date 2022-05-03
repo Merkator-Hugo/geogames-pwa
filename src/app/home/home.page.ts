@@ -139,9 +139,9 @@ export class HomePage implements OnInit, OnDestroy {
       Geolocation.clearWatch(this.watch);
     }
     if (this.gamestate.gameMode.isDemo()) {
-      this.cartRidge.load();
+      this.cartRidge.test.load();
     } else if (this.gamestate.gameMode.isPlay()) {
-      this.cartRidge.load();
+      this.cartRidge.test.load();
       this.watch = Geolocation.watchPosition(
         { enableHighAccuracy: true },
         (data) => {

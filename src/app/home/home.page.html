@@ -41,8 +41,8 @@
 </ion-content>
 
 <ion-content [fullscreen]="true" *ngIf="gamestate.gameMode.isEdit()">
-  <app-edit-smallscreen *ngIf="gamestate.gui.screenWidth.get() < 400"></app-edit-smallscreen>
-  <app-edit-widescreen *ngIf="gamestate.gui.screenWidth.get()  >= 400"></app-edit-widescreen>
+  <app-edit-smallscreen *ngIf="!gamestate.gui.screenWidth.isWide()"></app-edit-smallscreen>
+  <app-edit-widescreen *ngIf="gamestate.gui.screenWidth.isWide()"></app-edit-widescreen>
 </ion-content>
 
 <ion-fab vertical="bottom" horizontal="end" slot="fixed" *ngIf="gamestate.gameMode.isDemo()">

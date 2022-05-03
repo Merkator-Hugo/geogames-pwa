@@ -9,7 +9,7 @@
 <div *ngIf="showZones">
   <ion-item *ngFor="let zone of editService.zones.get(); let i = index" lines="full" (click)="showZone(zone)">
     <ion-icon name="shapes-outline" slot="start"></ion-icon>
-    <ion-label>{{zone.id}}: {{zone.name}}</ion-label>
+    <ion-label>{{zone.id.get()}}: {{zone.name.get()}}</ion-label>
     <!-- <ion-icon name="chevron-down-outline" slot="end" *ngIf="!showZone[i]" (click)="showZone[i]=!showZone[i]"></ion-icon>
     <ion-icon name="chevron-up-outline" slot="end" *ngIf="showZone[i]" (click)="showZone[i]=!showZone[i]"></ion-icon> -->
   </ion-item>

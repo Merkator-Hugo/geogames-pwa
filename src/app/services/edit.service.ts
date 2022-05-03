@@ -3,29 +3,47 @@ import { View } from 'ol';
 import { CartAction } from '../model/cartridge/cart-action';
 import { CartZone } from '../model/cartridge/cart-zone';
 import { Cartridge } from '../model/cartridge/cartridge';
+import { ObjectTypes } from '../model/enums/object-types.enum';
 import { GameLocation } from '../model/utils/game-location';
 import { CartridgeService } from './cartridge.service';
+import { UtilsService } from './utils.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class EditService {
 
+  public current = {
+    object: {
+      clear: (): void => this.currentObject = null,
+      set: (object: ObjectTypes): ObjectTypes => this.currentObject = object,
+      get: (): ObjectTypes => this.currentObject,
+      isZone: (): boolean => this.currentObject === ObjectTypes.eZone
+    },
+    zone: {
+      clear: (): void => this.currentZone = null,
+      set: (zone: CartZone): CartZone => this.currentZone = zone,
+      get: (): CartZone => this.currentZone
+    }
+  };
   public cartridge = {
-    create: (name: string): Cartridge => this.currentCartridge = new Cartridge(name),
+    create: (): Cartridge => this.currentCartridge = new Cartridge(),
     load: () => {
-      this.cartridgeService.load();
+      this.cartridgeService.test.load();
       const cartridgeFile = this.cartridgeService.get();
-      this.currentCartridge = this.cartridge.create(cartridgeFile.name);
+      this.currentCartridge = this.cartridge.create();
+      this.currentCartridge.main.id.set(cartridgeFile.main.id);
+      this.currentCartridge.main.name.set(cartridgeFile.main.name);
+      this.currentCartridge.main.code.set(cartridgeFile.main.code);
       this.currentCartridge.start.view.set(cartridgeFile.start.view);
       this.currentCartridge.start.player.set(cartridgeFile.start.player);
       this.currentCartridge.zones.set(cartridgeFile.zones);
       this.currentCartridge.actions.set(cartridgeFile.actions);
-      const x = 1;
     },
-    save: () => {},
-    rename: (name: string): void => this.currentCartridge.setName(name),
-    get: (): Cartridge => this.currentCartridge
+    save: () => this.cartridgeService.local.save(this.currentCartridge),
+    rename: (name: string): void => this.currentCartridge.main.name.set(name),
+    get: (): Cartridge => this.currentCartridge,
+    isEditable: (): boolean => !this.currentCartridge.main.isSealed()
   };
   public start = {
     setView: (view: View): void => this.currentCartridge.start.view.set(view),
@@ -35,11 +53,7 @@ export class EditService {
     count: (): number => this.currentCartridge.zones.get().length,
     get: (): CartZone[] => this.currentCartridge.zones.get(),
     set: (zones) => this.currentCartridge.zones.set(zones),
-    addNew: () => {
-      this.currentCartridge.zones.add(
-        new CartZone('#zoneNew', '', '', false, false, [])
-      );
-    }
+    addNew: () => this.currentCartridge.zones.add(new CartZone())
   };
   public actions = {
     count: (): number => this.currentCartridge.actions.get().length,
@@ -48,9 +62,12 @@ export class EditService {
   };
 
   private currentCartridge: Cartridge;
+  private currentObject: ObjectTypes = null;
+  private currentZone: CartZone = null;
 
   constructor(
-    private cartridgeService: CartridgeService
+    private cartridgeService: CartridgeService,
+    private utils: UtilsService
   ) {}
 
 }

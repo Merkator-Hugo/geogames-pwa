@@ -1,0 +1,32 @@
+<ion-toolbar color="light">
+  <ion-title>Zone</ion-title>
+  <ion-buttons slot="end">
+    <ion-button (click)="save()">
+      <ion-icon name="save-outline"></ion-icon>
+    </ion-button>
+    <ion-button (click)="close()">
+      <ion-icon name="close-outline"></ion-icon>
+    </ion-button>
+  </ion-buttons>
+</ion-toolbar>
+
+<ion-content>
+  <form [formGroup]="form">
+    <ion-item>
+      <ion-label>Id</ion-label>
+      <ion-input type="text" formControlName="id" class="ion-text-end" disabled></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>Name</ion-label>
+      <ion-input type="text" formControlName="name" required class="ion-text-end"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>Visible</ion-label>
+      <ion-checkbox formControlName="visible"></ion-checkbox>
+    </ion-item>
+    <ion-item>
+      <ion-label>Active</ion-label>
+      <ion-checkbox formControlName="active"></ion-checkbox>
+    </ion-item>
+  </form>
+</ion-content>

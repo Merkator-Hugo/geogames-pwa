@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HomePage } from './home.page';
 
 import { HomePageRoutingModule } from './home-routing.module';
@@ -14,12 +14,17 @@ import { EditSmallscreenComponent } from '../components/edit-smallscreen/edit-sm
 import { EditWidescreenComponent } from '../components/edit-widescreen/edit-widescreen.component';
 import { EditListZonesComponent } from '../components/edit-list-zones/edit-list-zones.component';
 import { EditListActionsComponent } from '../components/edit-list-actions/edit-list-actions.component';
+import { EditZoneComponent } from '../components/edit-zone/edit-zone.component';
+import { EditActionComponent } from '../components/edit-action/edit-action.component';
+import { EditListCartridgeComponent } from '../components/edit-list-cartridge/edit-list-cartridge.component';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
+    FormsModule,
+    ReactiveFormsModule,
     HomePageRoutingModule
   ],
   declarations: [
@@ -29,8 +34,11 @@ import { EditListActionsComponent } from '../components/edit-list-actions/edit-l
     MenuComponent,
     EditSmallscreenComponent,
     EditWidescreenComponent,
+    EditListCartridgeComponent,
     EditListZonesComponent,
     EditListActionsComponent,
+    EditZoneComponent,
+    EditActionComponent,
     ZoneListComponent,
     HomePage
   ]

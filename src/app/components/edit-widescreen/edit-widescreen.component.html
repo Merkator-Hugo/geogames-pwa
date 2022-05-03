@@ -1,10 +1,22 @@
 <ion-grid>
   <ion-row>
     <ion-col class="fixed-col">
+      <ion-toolbar color="light">
+        <ion-title>Zone</ion-title>
+        <ion-buttons slot="end">
+          <ion-button (click)="save()">
+            <ion-icon name="save-outline"></ion-icon>
+          </ion-button>
+          <ion-button (click)="close()">
+            <ion-icon name="close-outline"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+      </ion-toolbar>
       <app-edit-list-zones></app-edit-list-zones>
       <app-edit-list-actions></app-edit-list-actions>
     </ion-col>
     <ion-col>
+      <app-edit-zone *ngIf="editService.current.object.isZone()"></app-edit-zone>
     </ion-col>
   </ion-row>
 </ion-grid>

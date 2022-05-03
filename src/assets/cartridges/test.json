@@ -1,5 +1,9 @@
 {
-  "name": "TEST",
+  "main": {
+    "id": "50a8d13c-5489-42d7-9235-0c533d3022fe",
+    "name": "TEST",
+    "code": ""
+  },
   "start": {
     "view": {
       "center": [
@@ -15,7 +19,7 @@
   },
   "zones": [
     {
-      "id": "#zone0",
+      "id": "50a8d13c-5489-42d7-9235-0c533d3022z0",
       "zone": "POLYGON((5.646 51.7335, 5.647 51.7335, 5.647 51.734, 5.646 51.734, 5.646 51.7335))",
       "name": "Zone 0",
       "isVisible": true,
@@ -23,16 +27,16 @@
       "actions": [
         {
           "event": "zoneOnEnter",
-          "ids": "#action1;#action5;#action6"
+          "ids": "50a8d13c-5489-42d7-9235-0c533d3022a1;50a8d13c-5489-42d7-9235-0c533d3022a5;50a8d13c-5489-42d7-9235-0c533d3022a6"
         },
         {
           "event": "zoneOnLeave",
-          "ids": "#action2;#action7"
+          "ids": "50a8d13c-5489-42d7-9235-0c533d3022a2;50a8d13c-5489-42d7-9235-0c533d3022a7"
         }
       ]
     },
     {
-      "id": "#zone1",
+      "id": "50a8d13c-5489-42d7-9235-0c533d3022z1",
       "zone": "POLYGON((5.6465 51.7335, 5.6475 51.7335, 5.6475 51.734, 5.6465 51.734, 5.6465 51.7335))",
       "name": "Zone 1",
       "isVisible": false,
@@ -40,18 +44,18 @@
       "actions": [
         {
           "event": "zoneOnEnter",
-          "ids": "#action3;#action8"
+          "ids": "50a8d13c-5489-42d7-9235-0c533d3022a3;50a8d13c-5489-42d7-9235-0c533d3022a8"
         },
         {
           "event": "zoneOnLeave",
-          "ids": "#action4"
+          "ids": "50a8d13c-5489-42d7-9235-0c533d3022a4"
         }
       ]
     }
   ],
   "actions": [
     {
-      "id": "#action1",
+      "id": "50a8d13c-5489-42d7-9235-0c533d3022a1",
       "type": "sendMessage",
       "name": "",
       "payload": {
@@ -59,7 +63,7 @@
       }
     },
     {
-      "id": "#action2",
+      "id": "50a8d13c-5489-42d7-9235-0c533d3022a2",
       "type": "sendMessage",
       "name": "",
       "payload": {
@@ -67,7 +71,7 @@
       }
     },
     {
-      "id": "#action3",
+      "id": "50a8d13c-5489-42d7-9235-0c533d3022a3",
       "type": "sendMessage",
       "name": "",
       "payload": {
@@ -75,7 +79,7 @@
       }
     },
     {
-      "id": "#action4",
+      "id": "50a8d13c-5489-42d7-9235-0c533d3022a4",
       "type": "sendMessage",
       "name": "",
       "payload": {
@@ -83,52 +87,52 @@
       }
     },
     {
-      "id": "#action5",
+      "id": "50a8d13c-5489-42d7-9235-0c533d3022a5",
       "type": "setVisibility",
       "name": "",
       "payload": {
         "type": "zone",
-        "id": "#zone1",
+        "id": "50a8d13c-5489-42d7-9235-0c533d3022z1",
         "state": true
       }
     },
     {
-      "id": "#action6",
+      "id": "50a8d13c-5489-42d7-9235-0c533d3022a6",
       "type": "setActivation",
       "name": "",
       "payload": {
         "type": "zone",
-        "id": "#zone1",
+        "id": "50a8d13c-5489-42d7-9235-0c533d3022z1",
         "state": true
       }
     },
     {
-      "id": "#action7",
+      "id": "50a8d13c-5489-42d7-9235-0c533d3022a7",
       "type": "setActivation",
       "name": "",
       "payload": {
         "type": "zone",
-        "id": "#zone0",
+        "id": "50a8d13c-5489-42d7-9235-0c533d3022z0",
         "state": false
       }
     },
     {
-      "id": "#action8",
+      "id": "50a8d13c-5489-42d7-9235-0c533d3022a8",
       "type": "answerQuestion",
       "name": "",
       "payload": {
         "question": "How many days has 1 week ?",
         "answer": [
-          "3"
+          "7"
         ],
         "actions": [
-          "#action9",
-          "#action10"
+          "50a8d13c-5489-42d7-9235-0c533d3022a9",
+          "50a8d13c-5489-42d7-9235-0c533d302a10"
         ]
       }
     },
     {
-      "id": "#action9",
+      "id": "50a8d13c-5489-42d7-9235-0c533d3022a9",
       "type": "sendMessage",
       "name": "",
       "payload": {
@@ -136,7 +140,7 @@
       }
     },
     {
-      "id": "#action10",
+      "id": "50a8d13c-5489-42d7-9235-0c533d302a10",
       "type": "sendMessage",
       "name": "",
       "payload": {
