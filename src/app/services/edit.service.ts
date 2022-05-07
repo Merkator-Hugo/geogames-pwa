@@ -29,7 +29,6 @@ export class EditService {
   public cartridge = {
     create: (): Cartridge => this.currentCartridge = new Cartridge(),
     load: () => {
-      this.cartridgeService.test.load();
       const cartridgeFile = this.cartridgeService.get();
       this.currentCartridge = this.cartridge.create();
       this.currentCartridge.main.id.set(cartridgeFile.main.id);
@@ -40,7 +39,7 @@ export class EditService {
       this.currentCartridge.zones.set(cartridgeFile.zones);
       this.currentCartridge.actions.set(cartridgeFile.actions);
     },
-    save: () => this.cartridgeService.local.save(this.currentCartridge),
+    save: () => this.cartridgeService.save(this.currentCartridge),
     rename: (name: string): void => this.currentCartridge.main.name.set(name),
     get: (): Cartridge => this.currentCartridge,
     isEditable: (): boolean => !this.currentCartridge.main.isSealed()

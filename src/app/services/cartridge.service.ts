@@ -1,5 +1,5 @@
-import { Injectable } from '@angular/core';
-import { HttpClient, JsonpClientBackend } from '@angular/common/http';
+import { Injectable, EventEmitter } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import View from 'ol/View';
 import { GameAction } from '../model/actions/game-action';
 import { GameLocation } from '../model/utils/game-location';
@@ -15,41 +15,47 @@ import { Cartridge } from '../model/cartridge/cartridge';
 })
 export class CartridgeService {
 
-  public test = {
-    load: () => {
-      this.httpClient.get('/assets/cartridges/test.json').subscribe(
-        (result) => {
-          this.cartridge = result;
-          this.handleCartridge();
-        }
-      );
-    }
-  };
+  public loaded: EventEmitter<any> = new EventEmitter();
+  public activated: EventEmitter<any> = new EventEmitter();
 
-  public local = {
-    configure: async () => {
-      await Storage.configure({
-        group: 'cartridges'
-      });
-    },
-    load: async (id: string) => {
-      await this.local.configure();
-      const { value } = await Storage.get({ key: id });
-      this.cartridge = JSON.parse(value);
-      this.handleCartridge();
-    },
-    list: async () => {
-      await this.local.configure();
-      return await Storage.keys().then((result) => result);
-    },
-    save: async (cartridge: Cartridge) => {
-      await this.local.configure();
-      await Storage.set({
-        key: cartridge.main.id.get() + '@' + cartridge.main.name.get(),
-        value: JSON.stringify(cartridge),
-      });
-    },
-  };
+  // private demo = {
+  //   load: () => {
+  //     return this.httpClient.get('/assets/cartridges/test.json');
+  //     // .subscribe(
+  //     //   (result) => {
+  //     //     this.cartridge = result;
+  //     //     this.handleCartridge();
+  //     //   }
+  //     // );
+  //   // }
+  // };
+
+  // private local = {
+  //   configure: async () => {
+  //     await Storage.configure({
+  //       group: 'cartridges'
+  //     });
+  //   },
+  //   load: async (id: string) => {
+  //     await this.local.configure();
+  //     const { value } = await Storage.get({ key: id });
+  //     if (value !== undefined && value !== null) {
+  //       this.cartridge = JSON.parse(value);
+  //       this.handleCartridge();
+  //     }
+  //   },
+  //   list: async () => {
+  //     await this.local.configure();
+  //     return await Storage.keys().then((result) => result);
+  //   },
+  //   save: async () => {
+  //     await this.local.configure();
+  //     await Storage.set({
+  //       key: this.cartridge.main.id.get() + '@' + this.cartridge.main.name.get(),
+  //       value: JSON.stringify(this.cartridge),
+  //     });
+  //   },
+  // };
 
   private cartridge;
 
@@ -69,12 +75,54 @@ export class CartridgeService {
     this.mapService.zones.clear();
   }
 
+  public async load(id?: string) {
+    await Storage.configure({
+      group: 'cartridges'
+    });
+    if (id !== undefined && id !== null) {
+      Storage.get({ key: id }).then((result) => {
+        this.cartridge = result.value;
+        this.loaded.emit();
+      });
+    } else {
+      Storage.get({ key: 'current' }).then((result) => {
+        if (result.value !== undefined && result.value !== null) {
+          Storage.get({ key: result.value }).then((result2) => {
+            this.cartridge = result2.value;
+            this.loaded.emit();
+          });
+        } else {
+          this.httpClient.get('/assets/cartridges/test.json').subscribe((result2) => {
+            this.cartridge = result2;
+            this.loaded.emit();
+          });
+        }
+      });
+    }
+  }
+
+  public async list(){
+    await Storage.configure({
+      group: 'cartridges'
+    });
+    return await Storage.keys().then((result) => result);
+  }
+
+  public async save(cartridge: Cartridge) {
+    await Storage.configure({
+      group: 'cartridges'
+    });
+    return await Storage.set({
+      key: cartridge.main.id.get() + '@' + cartridge.main.name.get(),
+      value: JSON.stringify(cartridge),
+    });
+  }
+
   public get() {
     return this.cartridge;
   }
 
-  private handleCartridge() {
-    this.clear();
+  public activate() {
     const actions: Map<string, GameAction> = new Map();
     this.gamestate.main.id.set(this.cartridge.main.id);
     this.gamestate.main.name.set(this.cartridge.main.name);
@@ -97,7 +145,15 @@ export class CartridgeService {
         this.gamestate.actions.add(ObjectTypes.eZone, zone.id, action.event, action.ids);
       });
     });
-    this.gamestate.run();
+    Storage.configure({
+      group: 'tiles'
+    }).then(() => {
+      this.cartridge.tiles.forEach((tile) => {
+        Storage.set({ key: tile.key, value: tile.value });
+      });
+    });
+    this.activated.emit();
+    // this.gamestate.run();
   }
 
 }

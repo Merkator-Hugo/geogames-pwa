@@ -14,7 +14,7 @@ export class MenuComponent implements OnInit {
 
   public gameModes: GameModes[];
   public currentSegment: GameModes;
-  public games: { id: string, name: string }[] = [];
+  public games: { id: string; name: string }[] = [];
   private lastSegment: GameModes;
 
   constructor(
@@ -37,11 +37,11 @@ export class MenuComponent implements OnInit {
 
   async loadGame(event: any) {
     event.stopPropagation();
-    const result = await this.cartRidge.local.list();
+    const result = await this.cartRidge.list();
     this.games = [];
     result.keys.forEach((key) => this.games.push({ id: key.split('@')[0], name: key.split('@')[1] }));
     this.presentAlertSelect(this.games).then((selection) => {
-      this.cartRidge.local.load(selection.data.values.id + '@' + selection.data.values.name);
+      this.cartRidge.load(selection.data.values.id + '@' + selection.data.values.name);
       this.modalController.dismiss();
     });
   }

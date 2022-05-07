@@ -38,6 +38,10 @@ export class GameStateService {
       set: (width: number): number => this.screenWidth = width,
       isWide: (): boolean => this.screenWidth >= 400
     },
+    map: {
+      setImage: () => this.mapService.map.layers.setImage(this.player.location.get()),
+      setOffline: () => this.mapService.map.layers.setOffline()
+    }
   };
   public gameMode = {
     getAll: (): GameModes[] => Object.values(GameModes).filter(item => isNaN(Number(item))),
@@ -46,6 +50,7 @@ export class GameStateService {
       this.modeChanged.emit(this.currentGameMode);
     },
     current: (): GameModes => this.currentGameMode,
+    isHome: (): boolean => this.currentGameMode === GameModes.eHome,
     isPlay: (): boolean => this.currentGameMode === GameModes.ePlay,
     isDemo: (): boolean => this.currentGameMode === GameModes.eDemo,
     isEdit: (): boolean => this.currentGameMode === GameModes.eEdit,
@@ -162,12 +167,13 @@ export class GameStateService {
 
   public run() {
     this.mapService.player.add(this.main.player.get());
+    this.mapService.map.layers.setOffline();
     this.mapService.view.refresh(this.main.view.get());
   }
 
   private init() {
-    this.currentGameMode = GameModes.eDemo; // GameModes.eEdit; // GameModes.eDemo;
-    this.showLocation = true; //false;
+    this.currentGameMode = GameModes.eHome; // GameModes.eEdit; // GameModes.eDemo;
+    this.showLocation = true;
     this.navigateTo = null;
   }
 

@@ -18,7 +18,13 @@ import { LocationService } from './location.service';
 import WKT from 'ol/format/WKT';
 import { ObjectRef } from '../model/objects/object-ref';
 import { ZoneObject } from '../model/objects/zone-object';
-import { Projection } from 'ol/proj';
+import { Projection, transform } from 'ol/proj';
+import { ImageStatic, XYZ } from 'ol/source';
+import ImageLayer from 'ol/layer/Image';
+import Static from 'ol/source/ImageStatic';
+import {getCenter} from 'ol/extent';
+import { Storage } from '@capacitor/storage';
+
 
 @Injectable({
 	providedIn: 'root'
@@ -28,15 +34,51 @@ export class MapService {
 	public map = {
 		create: (): Map => {
 			const center = new GameLocation(5.387307113186567, 52.15528108667735, 'EPSG:4326');
+			const lat = center.getCoords()[0];
+			const lon = center.getCoords()[1];
+			// const mapUrl = 'assets/map.jpeg';
+			// const mapExtent = [lat - 1400, lon - 1000, lat + 745, lon + 745];
+			// const mapProjection = new Projection({
+			// 	code: 'map-image',
+			// 	units: 'pixels',
+			// 	extent: mapExtent,
+			// });
+			this.osmLayer = new TileLayer({
+				source: new OSM()
+			});
+			this.imageLayer = new ImageLayer({
+				source: new Static({
+					url: 'assets/map.jpeg', //  mapUrl,
+					projection: new Projection({
+						code: 'map-image',
+						units: 'pixels',
+						extent: [lat - 1400, lon - 1000, lat + 745, lon + 745], //mapExtent,
+					}), //mapProjection,
+					imageExtent: [lat - 1400, lon - 1000, lat + 745, lon + 745], // mapExtent,
+				}),
+			});
+			this.offlineLayer = new TileLayer({
+				source: new XYZ({
+					minZoom: 0,
+					maxZoom: 18,
+					tileLoadFunction: (tile: any, url) => {
+						Storage.configure({ group: 'tiles' }).then(() => {
+							console.log(url);
+							Storage.get({ key: url }).then( (result) => {
+								tile.getImage().src = result.value;
+							});
+						});
+					},
+					tileUrlFunction: (c) => c[0] + '_' + c[1] + '_' + c[2],
+				})
+			});
 			this.currentMap = new Map({
-				layers: [
-					new TileLayer({
-						source: new OSM()
-					})],
+				layers: [this.imageLayer],
 				target: document.getElementById('map'),
 				view: new View({
-					center: center.getCoords(),
-					zoom: 12
+					center: getCenter([lat - 1400, lon - 1000, lat + 745, lon + 745]), // center.getCoords(),
+					zoom: 16,
+					extent: [lat - 1400, lon - 1000, lat + 745, lon + 745] //mapExtent
 				})
 			});
 			this.currentMap.on('click', (event) => {
@@ -47,6 +89,38 @@ export class MapService {
 				this.currentMap.updateSize();
 			}, 500);
 			return this.currentMap;
+		},
+		layers: {
+			clear: () => {
+				this.currentMap.removeLayer(this.imageLayer);
+				this.currentMap.removeLayer(this.offlineLayer);
+				this.currentMap.removeLayer(this.osmLayer);
+			},
+			setImage: (center: GameLocation) => {
+				this.map.layers.clear();
+				const lat = center.getCoords()[0];
+				const lon = center.getCoords()[1];
+					this.imageLayer = new ImageLayer({
+					source: new Static({
+						url: 'assets/map.jpeg', //  mapUrl,
+						projection: new Projection({
+							code: 'map-image',
+							units: 'pixels',
+							extent: [lat - 1400, lon - 1000, lat + 745, lon + 745], //mapExtent,
+						}), //mapProjection,
+						imageExtent: [lat - 1400, lon - 1000, lat + 745, lon + 745], // mapExtent,
+					}),
+				});
+				this.currentMap.addLayer(this.imageLayer);
+			},
+			setOffline: () => {
+				this.map.layers.clear();
+				this.currentMap.addLayer(this.offlineLayer);
+			},
+			setOsm: () => {
+				this.map.layers.clear();
+				this.currentMap.addLayer(this.osmLayer);
+			}
 		}
 	};
 	public view = {
@@ -58,7 +132,7 @@ export class MapService {
 	public player = {
 		add: (point: GameLocation): void => this.player.refresh(point),
 		clear: () => {
-			if (this.playerLayer !== null  && this.zonesLayer !== undefined) {
+			if (this.playerLayer !== null  && this.playerLayer !== undefined) {
 				const source = this.playerLayer.getSource();
 				source.clear();
 			}
@@ -181,8 +255,10 @@ export class MapService {
 			return new GameLocation(x,y);
 		}
 	};
-
 	private currentMap: Map;
+	private imageLayer: ImageLayer<Static>;
+	private osmLayer: TileLayer<OSM>;
+	private offlineLayer: TileLayer<XYZ>;
 	private playerLayer: VectorLayer<VectorSource>;
 	private zonesLayer: VectorLayer<VectorSource>;
 	private pointStyle = new Style({
@@ -221,6 +297,6 @@ export class MapService {
 		}),
 	});
 
-	constructor(private locationService: LocationService) { }
+	constructor(private locationService: LocationService) {}
 
 }

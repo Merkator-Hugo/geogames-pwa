@@ -138,10 +138,29 @@ export class HomePage implements OnInit, OnDestroy {
     if (this.watch !== null && this.watch !== undefined) {
       Geolocation.clearWatch(this.watch);
     }
-    if (this.gamestate.gameMode.isDemo()) {
-      this.cartRidge.test.load();
+    if (this.gamestate.gameMode.isHome()) {
+      this.cartRidge.clear();
+      this.gamestate.gui.map.setImage();
+    } else if (this.gamestate.gameMode.isDemo()) {
+      this.cartRidge.clear();
+      this.cartRidge.load('demo');
+      this.cartRidge.loaded.subscribe(() => {
+        this.cartRidge.activate();
+      });
+      this.cartRidge.activated.subscribe(() => {
+        this.gamestate.gui.map.setOffline();
+        this.gamestate.run();
+      });
     } else if (this.gamestate.gameMode.isPlay()) {
-      this.cartRidge.test.load();
+      this.cartRidge.clear();
+      this.cartRidge.load();
+      this.cartRidge.loaded.subscribe(() => {
+        this.cartRidge.activate();
+      });
+      this.cartRidge.activated.subscribe(() => {
+        this.gamestate.gui.map.setOffline();
+        this.gamestate.run();
+      });
       this.watch = Geolocation.watchPosition(
         { enableHighAccuracy: true },
         (data) => {
@@ -152,7 +171,11 @@ export class HomePage implements OnInit, OnDestroy {
         }
       );
     } else if (this.gamestate.gameMode.isEdit()) {
-      this.editService.cartridge.load();
+      this.cartRidge.clear();
+      this.cartRidge.load();
+      this.cartRidge.loaded.subscribe(() => {
+        this.editService.cartridge.load();
+      });
     }
   }
 

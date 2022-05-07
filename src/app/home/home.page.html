@@ -25,9 +25,10 @@
 <ion-content [fullscreen]="true" *ngIf="!gamestate.gameMode.isEdit()">
   <ion-toolbar *ngIf="gamestate.gui.showLocation.get()">
     <ion-buttons slot="start">
-      <ion-button>
+      <ion-button (click)="RD = !RD">
         <ion-icon name="locate-outline"></ion-icon>
-        &nbsp;{{gamestate.player.location.get().format(4)}}
+        <span *ngIf="!RD">&nbsp;{{gamestate.player.location.get().format('EPSG:4326', 4)}}</span>
+        <span *ngIf="RD">&nbsp;{{gamestate.player.location.get().format()}}</span>
       </ion-button>
     </ion-buttons>
     <ion-buttons slot="end">

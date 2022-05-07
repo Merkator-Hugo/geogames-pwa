@@ -39,13 +39,21 @@ export class GameLocation {
         this.lon += speed;
     }
 
-    format(fixed: number): string {
-        const latlon = this.getCoords('EPSG:4326');
-        const lat = latlon[1];
-        const lon = latlon[0];
-        const latLabel = (lat > 0) ? 'N' : 'S';
-        const lonLabel = (lon > 0) ? 'E' : 'W';
-        return (latLabel + ' ' + lat.toFixed(fixed) + ' / ' +lonLabel + ' ' +  lon.toFixed(fixed));
+    format(srid?: string, fixed?: number, ): string {
+        let psrid = this.srid;
+        if (srid === undefined) {
+            psrid = this.srid;
+            const xy = this.getCoords(psrid);
+            return ('X: ' + xy[0].toFixed(0) + ' / Y: ' + xy[1].toFixed(0));
+        } else {
+            psrid = srid;
+            const latlon = this.getCoords(psrid);
+            const lat = latlon[1];
+            const lon = latlon[0];
+            const latLabel = (lat > 0) ? 'N' : 'S';
+            const lonLabel = (lon > 0) ? 'E' : 'W';
+            return (latLabel + ' ' + lat.toFixed(fixed) + ' / ' +lonLabel + ' ' +  lon.toFixed(fixed));
+        }
     }
 
 }
